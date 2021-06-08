@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wh40k_crusader/presentation/create_account_view/create_account_view_model.dart';
 import 'package:wh40k_crusader/presentation/dumb_widgets/authentication_layout.dart';
-import 'package:wh40k_crusader/presentation/login_view/login_view_model.dart';
 
-class LoginView extends StatelessWidget {
+class CreateAccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-      viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<CreateAccountViewModel>.reactive(
+      viewModelBuilder: () => CreateAccountViewModel(),
       builder: (context, model, child) => Scaffold(
         body: AuthenticationLayout(
           busy: model.isBusy,
-          title: 'Welcome',
-          subtitle: 'Enter your email address to sign in.',
+          title: 'Create Account',
+          subtitle: 'Enter your name, email, and password to sign up.',
+          mainButtonTitle: 'SIGN UP',
           form: FormBuilder(
-            key: model.loginFormKey,
-            onChanged: () {},
-            autovalidateMode: AutovalidateMode.disabled,
-            initialValue: {
-              model.formEmailField: '',
-              model.formPasswordField: '',
-            },
+            key: model.signUpFormKey,
             child: Column(
               children: [
+                TextField(
+                  decoration: InputDecoration(labelText: 'Full Name'),
+                ),
                 FormBuilderTextField(
                   name: model.formEmailField,
                   validator: FormBuilderValidators.required(context),
@@ -37,13 +35,10 @@ class LoginView extends StatelessWidget {
               ],
             ),
           ),
-          mainButtonTitle: 'SIGN IN',
           validationMessage: model.validationMessage,
+          showTermsText: true,
           onMainButtonTapped: () => model.saveData,
-          onCreateAccountTapped: () => model.navigateToSignUp,
-          onForgotPassword: () {
-            // TODO implement password recovery
-          },
+          onBackPressed: () => model.navigateBack,
         ),
       ),
     );
