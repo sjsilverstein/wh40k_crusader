@@ -17,8 +17,8 @@ class HomeView extends StatelessWidget {
             children: [
               Text(model.title),
               ElevatedButton(
-                child: Text('Do something'),
-                onPressed: () => model.doSomething(),
+                child: Text('Log Off'),
+                onPressed: () => model.logoff(),
               ),
             ],
           ),

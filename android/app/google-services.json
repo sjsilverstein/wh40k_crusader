@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1052070925333",
+    "project_id": "wh40kcrusader",
+    "storage_bucket": "wh40kcrusader.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052070925333:android:8c3c9b99decd8b9f81ea1c",
+        "android_client_info": {
+          "package_name": "com.example.wh40k_crusader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052070925333-qgne3fs2a260r8sidkdd3d333uj9s4rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5ZiJ7kYSG-ReYzf0w7mUkX8b8QcnVb3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052070925333-qgne3fs2a260r8sidkdd3d333uj9s4rc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1052070925333-buofntfvbjfaqb4tolv3njqq6db1b77l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wh40kCrusader"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

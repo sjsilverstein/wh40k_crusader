@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:wh40k_crusader/presentation/create_account_view/create_account_view.dart';
 import 'package:wh40k_crusader/presentation/home_view/home_view.dart';
+import 'package:wh40k_crusader/presentation/login_view/login_view.dart';
 import 'package:wh40k_crusader/presentation/startup_view/startup_view.dart';
 import 'package:wh40k_crusader/routing/routes.dart';
 
@@ -21,6 +23,15 @@ class Router {
 
       case rNavigationRoutes.StartUpRoute:
         pageWidget = StartUpView();
+
+        break;
+
+      case rNavigationRoutes.SignUpRoute:
+        pageWidget = CreateAccountView();
+
+        break;
+      case rNavigationRoutes.LoginRoute:
+        pageWidget = LoginView();
 
         break;
 

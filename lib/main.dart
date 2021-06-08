@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:wh40k_crusader/routing/router.dart' as projectRouter;
 import 'package:wh40k_crusader/routing/routes.dart';
@@ -12,15 +13,28 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.dark(),
-      navigatorKey: projectRouter.Router.navigatorKey,
-      onGenerateRoute: projectRouter.Router.generateRoute,
-      initialRoute: rNavigationRoutes.HomeRoute,
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something is Wrong');
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData.dark(),
+            navigatorKey: projectRouter.Router.navigatorKey,
+            onGenerateRoute: projectRouter.Router.generateRoute,
+            initialRoute: rNavigationRoutes.LoginRoute,
+          );
+        }
+
+        return CircularProgressIndicator();
+      },
     );
   }
 }
