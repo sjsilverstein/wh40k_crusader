@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/presentation/dumb_widgets/authentication_layout.dart';
-import 'package:wh40k_crusader/presentation/login_view/login_view_model.dart';
+import 'package:wh40k_crusader/presentation/sign_up_view/sign_up_view_model.dart';
 
-class LoginView extends StatelessWidget {
+class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-      viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<SignUpViewModel>.reactive(
+      viewModelBuilder: () => SignUpViewModel(),
       builder: (context, model, child) => Scaffold(
         body: AuthenticationLayout(
           busy: model.isBusy,
-          onCreateAccountTapped: () {},
-          title: 'Welcome',
-          subtitile: 'Enter your email address to sign in.',
-          mainButtonTitle: 'SIGN IN',
+          title: 'Create Account',
+          subtitle: 'Enter your name, email, and password to sign up.',
+          mainButtonTitle: 'SIGN UP',
           form: Column(
             children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Full Name'),
+              ),
               TextField(
                 decoration: InputDecoration(labelText: 'Email'),
               ),
@@ -25,7 +27,9 @@ class LoginView extends StatelessWidget {
               ),
             ],
           ),
-          onForgotPassword: () {},
+          showTermsText: true,
+          onMainButtonTapped: () {},
+          onBackPressed: () {},
         ),
       ),
     );
