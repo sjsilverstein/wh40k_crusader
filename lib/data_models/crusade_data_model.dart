@@ -5,8 +5,8 @@ class CrusadeDataModel {
     'Necrons',
     'Space Marines',
   ];
-
-  final String documentUID;
+  final String? documentUID;
+  final String name;
   final String userUID;
   final String faction;
   final int battleTally;
@@ -16,8 +16,9 @@ class CrusadeDataModel {
   final int victories;
 
   CrusadeDataModel(
-      {required this.documentUID,
+      {this.documentUID,
       required this.userUID,
+      required this.name,
       required this.faction,
       required this.battleTally,
       required this.requisition,
@@ -25,23 +26,23 @@ class CrusadeDataModel {
       required this.supplyUsed,
       required this.victories});
 
-  factory CrusadeDataModel.fromMap(Map<String, dynamic> data) {
-    return CrusadeDataModel(
-      documentUID: data[kDocumentUID],
-      userUID: data[kUserUID] ?? 'No User UID',
-      faction: data[kFaction] ?? 'No Faction',
-      battleTally: data[kBattleTally] ?? 0,
-      requisition: data[kRequisition] ?? 0,
-      supplyLimit: data[kSupplyLimit] ?? 0,
-      supplyUsed: data[kSupplyUsed] ?? 0,
-      victories: data[kVictories] ?? 0,
-    );
-  }
+  CrusadeDataModel.fromJson(Map<String, Object?> data, String documentUID)
+      : this(
+          documentUID: documentUID,
+          userUID: data[kUserUID]! as String,
+          name: data[kName]! as String,
+          faction: data[kFaction]! as String,
+          battleTally: data[kBattleTally]! as int,
+          requisition: data[kRequisition]! as int,
+          supplyLimit: data[kSupplyLimit]! as int,
+          supplyUsed: data[kSupplyUsed]! as int,
+          victories: data[kVictories]! as int,
+        );
 
-  Map<String, dynamic> toMap() {
+  Map<String, Object?> toJson() {
     return {
-      kDocumentUID: documentUID,
       kUserUID: userUID,
+      kName: name,
       kFaction: faction,
       kBattleTally: battleTally,
       kRequisition: requisition,
@@ -53,8 +54,8 @@ class CrusadeDataModel {
 
   String toJSONString() {
     return '{'
-        '"$kDocumentUID": $documentUID,'
         '"$kUserUID": $userUID,'
+        '"$kName": $name,'
         '"$kFaction": $faction,'
         '"$kBattleTally": $battleTally,'
         '"$kRequisition": $requisition,'
