@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/presentation/dumb_widgets/authentication_layout.dart';
-import 'package:wh40k_crusader/presentation/login_view/login_view_model.dart';
+import 'package:wh40k_crusader/presentation/views/login_view/login_view_model.dart';
 
 class LoginView extends StatelessWidget {
   @override

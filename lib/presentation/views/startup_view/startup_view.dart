@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:wh40k_crusader/presentation/startup_view/startup_view_model.dart';
+import 'package:wh40k_crusader/presentation/views/startup_view/startup_view_model.dart';
 
 class StartUpView extends StatelessWidget {
   @override

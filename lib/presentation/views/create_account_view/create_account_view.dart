@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
-import 'package:wh40k_crusader/presentation/create_account_view/create_account_view_model.dart';
 import 'package:wh40k_crusader/presentation/dumb_widgets/authentication_layout.dart';
+import 'package:wh40k_crusader/presentation/views/create_account_view/create_account_view_model.dart';
 
 class CreateAccountView extends StatelessWidget {
   @override
