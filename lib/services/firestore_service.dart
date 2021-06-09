@@ -15,6 +15,22 @@ class FirestoreService {
             toFirestore: (crusade, _) => crusade.toJson(),
           );
 
+  final StreamController<List<CrusadeDataModel>> _crusadeController =
+      StreamController<List<CrusadeDataModel>>.broadcast();
+
+  Stream listenToCrusadesRealTime() {
+    _crusadeCollectionRef.snapshots().listen((crusadeSnapshots) {
+      if (crusadeSnapshots.docs.isNotEmpty) {
+        List<CrusadeDataModel> crusades =
+            crusadeSnapshots.docs.map((crusade) => crusade.data()).toList();
+
+        _crusadeController.add(crusades);
+      }
+    });
+
+    return _crusadeController.stream;
+  }
+
   Future<List<CrusadeDataModel>> getCrusadeDataOneTime() async {
     List<CrusadeDataModel> crusades = [];
 

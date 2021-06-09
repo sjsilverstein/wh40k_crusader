@@ -11,7 +11,7 @@ class HomeViewModel extends BaseViewModel {
   final _firebaseAuth = locator<FirebaseAuthenicationService>();
   final FirestoreService _db = locator<FirestoreService>();
 
-  List<CrusadeDataModel> _crusades = [];
+  List<CrusadeDataModel>? _crusades;
   List<CrusadeDataModel>? get crusades => _crusades;
 
   final String _title = 'Warhammer 40K Crusader Home';
@@ -19,7 +19,16 @@ class HomeViewModel extends BaseViewModel {
 
   void listenToCrusades() async {
     setBusy(true);
-    _crusades = await _db.getCrusadeDataOneTime();
+    // _crusades = await _db.getCrusadeDataOneTime();
+
+    _db.listenToCrusadesRealTime().listen((crusadeData) {
+      List<CrusadeDataModel> updatedCrusadeData = crusadeData;
+      if (updatedCrusadeData.length > 0) {
+        _crusades = updatedCrusadeData;
+        notifyListeners();
+      }
+    });
+
     setBusy(false);
     notifyListeners();
   }
