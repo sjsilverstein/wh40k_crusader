@@ -50,7 +50,7 @@ class FirestoreService {
     _crusadeCollectionRef
         .doc(crusade.documentUID)
         .delete()
-        .then((value) => print('Crusade Deleted'))
+        .then((value) => print('Firestore: Crusade Deleted'))
         .catchError((err) => print(err));
   }
 }

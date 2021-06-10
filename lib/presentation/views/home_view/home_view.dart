@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:wh40k_crusader/presentation/dumb_widgets/crusade_card.dart';
 import 'package:wh40k_crusader/presentation/views/home_view/home_view_model.dart';
+import 'package:wh40k_crusader/presentation/widgets/crusade_card.dart';
 
 class HomeView extends StatelessWidget {
   @override

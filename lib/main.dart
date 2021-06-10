@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:wh40k_crusader/presentation/views/home_view/home_view.dart';
 import 'package:wh40k_crusader/routing/router.dart' as projectRouter;
+import 'package:wh40k_crusader/routing/routes.dart';
 
 import 'app/locator.dart';
 
@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
             title: 'Flutter Demo',
             theme: ThemeData.dark(),
             navigatorKey: projectRouter.Router.navigatorKey,
-            // onGenerateRoute: projectRouter.Router.generateRoute,
-            // initialRoute: rNavigationRoutes.LoginRoute,
-            home: HomeView(),
+            onGenerateRoute: projectRouter.Router.generateRoute,
+            initialRoute: rNavigationRoutes.LoginRoute,
+            // home: HomeView(),
           );
         }
 

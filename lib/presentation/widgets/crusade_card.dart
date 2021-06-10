@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
-import 'package:wh40k_crusader/presentation/dumb_widgets/crusade_card_view_model.dart';
+import 'package:wh40k_crusader/presentation/widgets/crusade_card_view_model.dart';
 
 class CrusadeCard extends StatelessWidget {
   final CrusadeDataModel crusade;
@@ -11,17 +11,19 @@ class CrusadeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CrusaderCardModel>.reactive(
-      viewModelBuilder: () => CrusaderCardModel(),
+      viewModelBuilder: () => CrusaderCardModel(crusade),
       builder: (context, model, child) => Card(
         child: ExpansionTile(
           title: Text(crusade.name),
           subtitle: Text(crusade.faction),
           trailing: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.red)),
-            child: Icon(Icons.delete),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.green)),
+            child: Icon(Icons.edit),
             onPressed: () {
-              model.deleteCrusadeDocumentByUID(crusade);
+              // model.deleteCrusadeDocumentByUID(crusade);
+              model.pushCrusadeRoute();
             },
           ),
           children: [
