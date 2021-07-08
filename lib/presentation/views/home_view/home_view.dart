@@ -40,7 +40,8 @@ class HomeView extends StatelessWidget {
           child: Icon(Icons.add),
           onPressed: () async {
             // TODO Dialog to Create a new crusade
-            await model.createNewCrusade();
+            // await model.createNewCrusade();
+            model.navigateToNewCrusadeForm();
           },
         ),
       ),

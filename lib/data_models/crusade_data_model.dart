@@ -3,8 +3,13 @@ import 'package:wh40k_crusader/app/app_constants.dart';
 
 class CrusadeDataModel {
   static const List<String> factions = [
+    'Imperium',
+    'Chaos',
+    'Aeldari',
+    'Tyranids',
+    'Orks',
     'Necrons',
-    'Space Marines',
+    'T\'au Empire',
   ];
   final String? documentUID;
   final String name;

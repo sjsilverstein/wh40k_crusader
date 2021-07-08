@@ -4,4 +4,5 @@ class rNavigationRoutes {
   static const String HomeRoute = '/home';
   static const String StartUpRoute = '/startUp';
   static const String CrusadeRoute = '/crusade';
+  static const String NewCrusade = '/createCrusade';
 }

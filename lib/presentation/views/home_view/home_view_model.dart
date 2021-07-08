@@ -60,6 +60,10 @@ class HomeViewModel extends StreamViewModel<List<CrusadeDataModel>> {
     _navigationService.replaceWith(rNavigationRoutes.LoginRoute);
   }
 
+  navigateToNewCrusadeForm() {
+    _navigationService.navigateTo(rNavigationRoutes.NewCrusade);
+  }
+
   createNewCrusade() async {
     DialogResponse? response = await _dialogService.showCustomDialog(
         variant: DialogType.newCrusadeForm,
