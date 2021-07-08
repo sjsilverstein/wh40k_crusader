@@ -20,7 +20,6 @@ abstract class AuthenticationViewModel extends FormViewModel {
     final result = await runBusyFuture(runAuthentication());
 
     if (!result.hasError) {
-      // Navigate to Success
       navigationService.replaceWith(successRoute);
     } else {
       print('We have an error');

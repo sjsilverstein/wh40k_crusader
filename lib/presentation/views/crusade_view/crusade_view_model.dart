@@ -9,11 +9,25 @@ class CrusadeViewModel extends BaseViewModel {
 
   final _db = locator<FirestoreService>();
   final _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
 
   CrusadeViewModel(this.crusade);
 
-  Future deleteCrusadeDocumentByUID(CrusadeDataModel crusade) async {
+  Future _deleteCrusadeDocument() async {
     await _db.deleteCrusade(crusade);
     _navigationService.back();
+  }
+
+  showConfirmDeleteDialog() async {
+    DialogResponse? response = await _dialogService.showConfirmationDialog(
+        title: 'Delete Crusade',
+        description: 'Are you sure you want to delete this crusade?',
+        confirmationTitle: 'Cancel'
+    cancelTitle: 'Delete');
+
+    print('Dialog Response ${response?.confirmed}');
+    if(!response!.confirmed){
+      _deleteCrusadeDocument();
+    }
   }
 }

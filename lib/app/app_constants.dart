@@ -4,6 +4,8 @@
 const String kDocumentUID = 'documentUID';
 const String kName = 'name';
 const String kUserUID = 'userUID';
+const String kCreatedAt = 'createdAt';
+const String kUpdatedAt = 'updatedAt';
 
 // Crusade
 const String kCrusadeModel = 'crusadeModel';

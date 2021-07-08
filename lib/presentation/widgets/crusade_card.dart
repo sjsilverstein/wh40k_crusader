@@ -34,6 +34,7 @@ class CrusadeCard extends StatelessWidget {
             _CrusadeCardExpansionRow('Supply Limit: ${crusade.supplyLimit}'),
             _CrusadeCardExpansionRow('Supply Used: ${crusade.supplyUsed}'),
             _CrusadeCardExpansionRow('Document UID : ${crusade.documentUID}'),
+            _CrusadeCardExpansionRow('Created Ad : ${crusade.createdAt}'),
           ],
         ),
       ),

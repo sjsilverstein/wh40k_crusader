@@ -8,7 +8,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (model) => model.listenToCrusades(),
+      // onModelReady: (model) => model.listenToCrusades(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: Text('Home App Bar'),
@@ -21,13 +21,13 @@ class HomeView extends StatelessWidget {
                 child: Text('Log Off'),
                 onPressed: () => model.logoff(),
               ),
-              model.crusades != null
+              model.data != null
                   ? SizedBox(
                       height: 600,
                       child: ListView.builder(
-                        itemCount: model.crusades!.length,
+                        itemCount: model.data!.length,
                         itemBuilder: (context, index) =>
-                            CrusadeCard(model.crusades![index]),
+                            CrusadeCard(model.data![index]),
                       ),
                     )
                   : Container(
@@ -38,9 +38,9 @@ class HomeView extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () {
+          onPressed: () async {
             // TODO Dialog to Create a new crusade
-            model.createNewCrusade();
+            await model.createNewCrusade();
           },
         ),
       ),

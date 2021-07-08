@@ -7,6 +7,7 @@ GetIt locator = GetIt.instance;
 
 void setupLocator() {
   locator.registerLazySingleton(() => NavigationService());
+  locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => FirebaseAuthenicationService());
   locator.registerLazySingleton(() => FirestoreService());
 }

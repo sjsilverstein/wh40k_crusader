@@ -27,8 +27,8 @@ class CrusadeView extends StatelessWidget {
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.red)),
               child: Icon(Icons.delete),
-              onPressed: () {
-                model.deleteCrusadeDocumentByUID(crusade);
+              onPressed: () async {
+                await model.showConfirmDeleteDialog();
               },
             ),
           ],
