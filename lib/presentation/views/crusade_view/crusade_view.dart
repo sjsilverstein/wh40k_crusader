@@ -18,19 +18,35 @@ class CrusadeView extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Text('${model.crusade.name}'),
-            Text('${model.crusade.faction}'),
-            Text('${model.crusade.userUID}'),
-            Text('${model.crusade.documentUID}'),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.red)),
-              child: Icon(Icons.delete),
-              onPressed: () async {
-                await model.showConfirmDeleteDialog();
-              },
+            Card(
+              child: Column(
+                children: [
+                  Text('Name: ${model.crusade.name}'),
+                  Text('Faction: ${model.crusade.faction}'),
+                  Text('User ID: ${model.crusade.userUID}'),
+                  Text('Document Id: ${model.crusade.documentUID}'),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red)),
+                    child: Icon(Icons.delete),
+                    onPressed: () async {
+                      await model.showConfirmDeleteDialog();
+                    },
+                  ),
+                ],
+              ),
             ),
+            Card(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Create Generic Unit'),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -22,7 +22,6 @@ class CreateCrusadeViewModel extends BaseViewModel {
   final String formSupplyLimitField = kSupplyLimit;
   final String formSupplyUsedField = kSupplyUsed;
   final String formVictoriesField = kVictories;
-  final List<int> valueRange = kCrusadeFormValueRange;
 
   String get name => formKey.currentState!.fields[formNameField]!.value;
   String get faction => formKey.currentState!.fields[formFactionField]!.value;

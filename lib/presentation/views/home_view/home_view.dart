@@ -15,6 +15,7 @@ class HomeView extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(model.title),
               ElevatedButton(
@@ -31,7 +32,12 @@ class HomeView extends StatelessWidget {
                       ),
                     )
                   : Container(
-                      child: CircularProgressIndicator(),
+                      child: Column(
+                        children: [
+                          Text('Searching for Crusades...'),
+                          CircularProgressIndicator(),
+                        ],
+                      ),
                     ),
             ],
           ),
