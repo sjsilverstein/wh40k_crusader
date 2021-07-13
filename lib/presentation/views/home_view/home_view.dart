@@ -28,8 +28,12 @@ class HomeView extends StatelessWidget {
                       height: 600,
                       child: ListView.builder(
                         itemCount: model.data!.length,
-                        itemBuilder: (context, index) =>
-                            CrusadeCard(model.data![index]),
+                        itemBuilder: (context, index) => CrusadeCard(
+                          crusade: model.data![index],
+                          onPressed: () => model.pushCrusadeRoute(
+                            model.data![index],
+                          ),
+                        ),
                       ),
                     )
                   : Container(

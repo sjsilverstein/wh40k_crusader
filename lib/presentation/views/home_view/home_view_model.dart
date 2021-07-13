@@ -31,6 +31,12 @@ class HomeViewModel extends StreamViewModel<List<CrusadeDataModel>> {
     _navigationService.replaceWith(rNavigationRoutes.LoginRoute);
   }
 
+  void pushCrusadeRoute(CrusadeDataModel crusade) {
+    logger.wtf('Pushing Route: ${crusade.documentUID}');
+    _navigationService.navigateTo(rNavigationRoutes.CrusadeRoute,
+        arguments: crusade);
+  }
+
   navigateToNewCrusadeForm() {
     _navigationService.navigateTo(rNavigationRoutes.NewCrusade);
   }
