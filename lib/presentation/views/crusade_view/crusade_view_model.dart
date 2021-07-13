@@ -36,13 +36,13 @@ class CrusadeViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  deleteRoster() async {
+  _deleteRoster() async {
     await _db.deleteRoster(crusade.documentUID!);
     await getCrusadeInfo();
   }
 
   Future _deleteCrusadeDocument() async {
-    await deleteRoster();
+    await _deleteRoster();
     await _db.deleteCrusade(crusade);
     _navigationService.back();
   }
@@ -59,6 +59,21 @@ class CrusadeViewModel extends BaseViewModel {
 
     if (!response!.confirmed) {
       _deleteCrusadeDocument();
+    }
+  }
+
+  showDropRosterDialog() async {
+    DialogResponse? response = await _dialogService.showConfirmationDialog(
+      title: 'Drop Roster',
+      description: 'Are you sure you want to drop this roster?',
+      confirmationTitle: 'Cancel',
+      cancelTitle: 'Delete',
+    );
+
+    logger.i('Dialog Response ${response?.confirmed}');
+
+    if (!response!.confirmed) {
+      _deleteRoster();
     }
   }
 
@@ -106,8 +121,8 @@ class CrusadeViewModel extends BaseViewModel {
     List<CrusadeUnitDataModel> flyer = [];
     List<CrusadeUnitDataModel> low = [];
     List<CrusadeUnitDataModel> sc = [];
-
-    roster.sort((a, b) => a.experience.compareTo(b.experience));
+    // Sort in Descending Experience Order
+    roster.sort((b, a) => a.experience.compareTo(b.experience));
 
     roster.forEach((element) {
       if (element.battleFieldRole == CrusadeUnitDataModel.battleFieldRoles[0]) {

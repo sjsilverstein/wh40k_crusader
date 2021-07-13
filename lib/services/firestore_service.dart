@@ -63,6 +63,8 @@ class FirestoreService {
 
   Future deleteCrusade(CrusadeDataModel crusade) async {
     logger.w('Firestore: Deleting Crusade');
+    await deleteRoster(crusade.documentUID!);
+
     await _crusadeCollectionRef
         .doc(crusade.documentUID)
         .delete()
@@ -129,6 +131,7 @@ class FirestoreService {
   }
 
   Future<void> deleteRoster(String crusadeUID) async {
+    logger.i('Deleting Crusade : $crusadeUID roster');
     var rosterRef = _crusadeCollectionRef
         .doc(crusadeUID)
         .collection(rosterCollectionName)

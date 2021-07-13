@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
-import 'package:wh40k_crusader/presentation/shared/ui_helpers.dart';
+import 'package:wh40k_crusader/presentation/widgets/battlefield_role_icon/battlefield_role_icon.dart';
 
 class CrusadeUnitCard extends StatelessWidget {
   final CrusadeUnitDataModel unit;
@@ -24,87 +24,12 @@ class CrusadeUnitCard extends StatelessWidget {
     }
   }
 
-  Widget _getIconFromBattleFieldRole() {
-    Image image;
-    switch (unit.battleFieldRole) {
-      case 'HQ':
-        image = Image(
-          image: AssetImage('assets/icons/hq.png'),
-        );
-        break;
-      case 'Elite':
-        image = Image(
-          image: AssetImage('assets/icons/elites.png'),
-        );
-        break;
-      case 'Troop':
-        image = Image(
-          image: AssetImage('assets/icons/troop.png'),
-        );
-        break;
-      case 'Flyer':
-        image = Image(
-          image: AssetImage('assets/icons/flyer.png'),
-        );
-        break;
-      case 'Lord of War':
-        image = Image(
-          image: AssetImage('assets/icons/lordOfWar.png'),
-        );
-        break;
-      case 'Heavy Support':
-        image = Image(
-          image: AssetImage('assets/icons/heavy-support.png'),
-        );
-        break;
-      case 'Fast Attack':
-        image = Image(
-          image: AssetImage('assets/icons/fast-attack.png'),
-        );
-        break;
-      case 'Transport':
-        image = Image(
-          image: AssetImage('assets/icons/transport.png'),
-        );
-        break;
-      case 'Supreme Commander':
-        image = Image(
-          image: AssetImage('assets/icons/supremeCmd.png'),
-        );
-        break;
-      default:
-        return Text(unit.battleFieldRole);
-    }
-    return SizedBox(
-      width: 75,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 30,
-            height: 30,
-            child: image,
-          ),
-          VerticalSpace.tiny,
-          Text(
-            unit.battleFieldRole,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ExpansionTile(
         title: Text('${unit.unitName} - ${unit.unitType}'),
-        leading: _getIconFromBattleFieldRole(),
+        leading: BattleFieldRoleIcon(unit.battleFieldRole),
         subtitle: Text(
           unit.getRank(),
           style: TextStyle(

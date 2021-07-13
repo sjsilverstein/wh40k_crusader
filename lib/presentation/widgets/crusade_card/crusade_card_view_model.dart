@@ -1,5 +1,6 @@
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/app/locator.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/routing/routes.dart';
@@ -18,6 +19,8 @@ class CrusaderCardModel extends BaseViewModel {
   }
 
   void pushCrusadeRoute() {
+    // TODO consider indexing bug when a crusade is deleted.
+    logger.wtf('Pushing Route: ${crusade.documentUID}');
     _navigationService.navigateTo(rNavigationRoutes.CrusadeRoute,
         arguments: crusade);
   }

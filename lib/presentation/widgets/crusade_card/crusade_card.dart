@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/presentation/widgets/crusade_card/crusade_card_view_model.dart';
+import 'package:wh40k_crusader/presentation/widgets/faction_icon/faction_icon.dart';
 
 class CrusadeCard extends StatelessWidget {
   final CrusadeDataModel crusade;
@@ -10,10 +12,12 @@ class CrusadeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO consider ViewModelWidget<CrusadeCardModel> as a way to resolve indexing bug.
     return ViewModelBuilder<CrusaderCardModel>.reactive(
       viewModelBuilder: () => CrusaderCardModel(crusade),
       builder: (context, model, child) => Card(
         child: ExpansionTile(
+          leading: FactionIcon(crusade.faction),
           title: Text(crusade.name),
           subtitle: Text(crusade.faction),
           trailing: ElevatedButton(
@@ -22,7 +26,7 @@ class CrusadeCard extends StatelessWidget {
                     MaterialStateProperty.all<Color>(Colors.green)),
             child: Icon(Icons.edit),
             onPressed: () {
-              // model.deleteCrusadeDocumentByUID(crusade);
+              logger.wtf(crusade.documentUID);
               model.pushCrusadeRoute();
             },
           ),
@@ -50,7 +54,9 @@ class _CrusadeCardExpansionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [Text(data)],
+      children: [
+        Text(data),
+      ],
     );
   }
 }

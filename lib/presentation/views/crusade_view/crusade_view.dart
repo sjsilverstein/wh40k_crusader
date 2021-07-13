@@ -22,10 +22,10 @@ class CrusadeView extends StatelessWidget {
           title: Text(crusade.name),
           actions: [
             ElevatedButton(
+              child: Icon(Icons.delete),
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.red)),
-              child: Icon(Icons.delete),
               onPressed: () async {
                 await model.showConfirmDeleteDialog();
               },
@@ -122,10 +122,13 @@ class CrusadeView extends StatelessWidget {
                         child: Text('Create Generic Unit'),
                       ),
                       ElevatedButton(
+                        child: Text('Drop Roster'),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.red)),
                         onPressed: () async {
-                          await model.deleteRoster();
+                          await model.showDropRosterDialog();
                         },
-                        child: Text('Delete Roster'),
                       ),
                     ],
                   )
