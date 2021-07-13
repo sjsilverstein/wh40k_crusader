@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/presentation/views/home_view/home_view_model.dart';
-import 'package:wh40k_crusader/presentation/widgets/crusade_card.dart';
+import 'package:wh40k_crusader/presentation/widgets/crusade_card/crusade_card.dart';
 
 class HomeView extends StatelessWidget {
   @override
@@ -11,17 +11,18 @@ class HomeView extends StatelessWidget {
       // onModelReady: (model) => model.listenToCrusades(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: Text('Home App Bar'),
+          title: Text(model.title),
+          actions: [
+            ElevatedButton(
+              child: Icon(Icons.logout),
+              onPressed: () => model.logoff(),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(model.title),
-              ElevatedButton(
-                child: Text('Log Off'),
-                onPressed: () => model.logoff(),
-              ),
               model.data != null
                   ? SizedBox(
                       height: 600,

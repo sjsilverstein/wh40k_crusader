@@ -14,44 +14,16 @@ class HomeViewModel extends StreamViewModel<List<CrusadeDataModel>> {
   final DialogService _dialogService = locator<DialogService>();
 
   Stream<List<CrusadeDataModel>> get stream => _db.listenToCrusadesRealTime();
-  //
-  // List<CrusadeDataModel>? _crusades;
-  // List<CrusadeDataModel>? get crusades => _crusades;
 
-  final String _title = 'Warhammer 40K Crusader Home';
+  final String _title = 'Warhammer 40K Crusader';
   String get title => _title;
 
   @override
   void onData(List<CrusadeDataModel>? data) {
-    // _crusades = data;
     notifyListeners();
     // TODO: implement onData
     super.onData(data);
   }
-
-  // void listenToCrusades() async {
-  //   setBusy(true);
-  //   // _crusades = await _db.getCrusadeDataOneTime();
-  //
-  //   _db.listenToCrusadesRealTime().listen((crusadeData) {
-  //     List<CrusadeDataModel> updatedCrusadeData = crusadeData;
-  //     if (updatedCrusadeData.length > 0) {
-  //       _crusades = updatedCrusadeData;
-  //       notifyListeners();
-  //     }
-  //   });
-  //
-  //   setBusy(false);
-  //   notifyListeners();
-  // }
-
-  // initialization() async {
-  //   setBusy(true);
-  //   // do Some async work
-  //
-  //   setBusy(false);
-  //   notifyListeners();
-  // }
 
   logoff() async {
     logger.i("Logging Out");
@@ -64,29 +36,5 @@ class HomeViewModel extends StreamViewModel<List<CrusadeDataModel>> {
   }
 
   // TODO Consider Dialog Form / Response Path
-  // createNewCrusade() async {
-  //   DialogResponse? response = await _dialogService.showCustomDialog(
-  //       variant: DialogType.newCrusadeForm,
-  //       title: 'New Crusade',
-  //       mainButtonTitle: 'Begin Crusade');
-  //
-  //   if (response != null) {
-  //     if (response.confirmed) {
-  //       print(response.responseData);
-  //     }
-  //   }
-  //
-  //   // CrusadeDataModel fakeCrusade = CrusadeDataModel(
-  //   //   userUID: 'Fake UID',
-  //   //   name: 'Fake Name',
-  //   //   faction: 'No Faction',
-  //   //   battleTally: -1,
-  //   //   requisition: -1,
-  //   //   supplyLimit: -1,
-  //   //   supplyUsed: -1,
-  //   //   victories: -1,
-  //   // );
-  //   //
-  //   // await _db.createNewCrusade(fakeCrusade);
-  // }
+
 }

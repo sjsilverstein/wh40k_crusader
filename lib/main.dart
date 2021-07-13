@@ -23,11 +23,14 @@ class MyApp extends StatelessWidget {
       future: _initialization,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('Something is Wrong');
+          return Center(
+              child:
+                  Text('Something is Wrong', textDirection: TextDirection.ltr));
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
-            title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
+            title: 'WH40k Crusader',
             theme: ThemeData.dark(),
             navigatorKey: projectRouter.Router.navigatorKey,
             onGenerateRoute: projectRouter.Router.generateRoute,

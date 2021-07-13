@@ -66,7 +66,7 @@ class CrusadeDataModel {
       kSupplyUsed: supplyUsed,
       kVictories: victories,
       kCreatedAt: createdAt ?? FieldValue.serverTimestamp(),
-      kUpdatedAt: updatedAt ?? FieldValue.serverTimestamp(),
+      kUpdatedAt: FieldValue.serverTimestamp(),
     };
   }
 
@@ -82,6 +82,28 @@ class CrusadeDataModel {
         '"$kVictories": $victories,'
         '}';
   }
+
+  CrusadeDataModel copyWith({
+    String? userUID,
+    String? name,
+    String? faction,
+    int? battleTally,
+    int? requisition,
+    int? supplyLimit,
+    int? supplyUsed,
+    int? victories,
+  }) =>
+      CrusadeDataModel(
+          userUID: userUID ?? this.userUID,
+          name: name ?? this.name,
+          faction: faction ?? this.faction,
+          battleTally: battleTally ?? this.battleTally,
+          requisition: requisition ?? this.requisition,
+          supplyLimit: supplyLimit ?? this.supplyLimit,
+          supplyUsed: supplyUsed ?? this.supplyUsed,
+          victories: victories ?? this.victories,
+          documentUID: this.documentUID,
+          createdAt: this.createdAt);
 
   @override
   String toString() {

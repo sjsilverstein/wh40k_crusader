@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
-import 'package:wh40k_crusader/presentation/widgets/crusade_card_view_model.dart';
+import 'package:wh40k_crusader/presentation/widgets/crusade_card/crusade_card_view_model.dart';
 
 class CrusadeCard extends StatelessWidget {
   final CrusadeDataModel crusade;
