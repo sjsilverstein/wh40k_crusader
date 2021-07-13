@@ -43,7 +43,14 @@ class CrusadeView extends StatelessWidget {
                       Text('Name: ${model.crusade.name}'),
                       Text('Faction: ${model.crusade.faction}'),
                       Text('Document: ${model.crusade.documentUID}'),
-                      Text('Supply Used: ${model.crusade.supplyUsed}'),
+                      Text(
+                        'Supply Used: ${model.crusade.supplyUsed}',
+                        style: TextStyle(
+                            color: model.crusade.supplyUsed >
+                                    model.crusade.supplyLimit
+                                ? Colors.red
+                                : Colors.green),
+                      ),
                     ],
                   ),
                 ],

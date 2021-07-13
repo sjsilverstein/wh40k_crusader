@@ -16,14 +16,16 @@ class BattleScar {
 }
 
 class CrusadeUnitDataModel {
-  static const List<String> battleFieldRoles = [
+  static const List<String> battleFieldRoles = const [
     'HQ',
     'Elite',
     'Troop',
+    'Transport',
     'Fast Attack',
     'Heavy Support',
-    'Dedicated Transport',
-    'Super-Heavy',
+    'Flyer',
+    'Lord of War',
+    'Supreme Commander'
   ];
   String? documentUID;
 

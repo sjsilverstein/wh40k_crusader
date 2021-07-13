@@ -32,11 +32,8 @@ class CrusadeViewModel extends BaseViewModel {
       crusade = newData;
       // _updateCrusadeFormFieldsValues();
     }
+    _orderRoster();
     notifyListeners();
-  }
-
-  _updateCrusadeFormFieldsValues() {
-    editCrusadeValuesFormKey.currentState!.reset();
   }
 
   deleteRoster() async {
@@ -97,5 +94,64 @@ class CrusadeViewModel extends BaseViewModel {
     await getCrusadeInfo();
     // after complete update the view with new crusade values and roster units available.
     // Update the generic unit to a form which adds the unit to the crusade.
+  }
+
+  _orderRoster() {
+    List<CrusadeUnitDataModel> hqs = [];
+    List<CrusadeUnitDataModel> elites = [];
+    List<CrusadeUnitDataModel> troops = [];
+    List<CrusadeUnitDataModel> transport = [];
+    List<CrusadeUnitDataModel> fastAttack = [];
+    List<CrusadeUnitDataModel> heavySupport = [];
+    List<CrusadeUnitDataModel> flyer = [];
+    List<CrusadeUnitDataModel> low = [];
+    List<CrusadeUnitDataModel> sc = [];
+
+    roster.sort((a, b) => a.experience.compareTo(b.experience));
+
+    roster.forEach((element) {
+      if (element.battleFieldRole == CrusadeUnitDataModel.battleFieldRoles[0]) {
+        hqs.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[1]) {
+        elites.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[2]) {
+        troops.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[3]) {
+        transport.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[4]) {
+        fastAttack.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[5]) {
+        heavySupport.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[6]) {
+        flyer.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[7]) {
+        low.add(element);
+      } else if (element.battleFieldRole ==
+          CrusadeUnitDataModel.battleFieldRoles[8]) {
+        sc.add(element);
+      } else {
+        logger.wtf("We have a unit with an unknown battlefield role");
+      }
+    });
+
+    List<CrusadeUnitDataModel> orderedRoster = [];
+    sc.forEach((element) => orderedRoster.add(element));
+    hqs.forEach((element) => orderedRoster.add(element));
+    elites.forEach((element) => orderedRoster.add(element));
+    troops.forEach((element) => orderedRoster.add(element));
+    transport.forEach((element) => orderedRoster.add(element));
+    fastAttack.forEach((element) => orderedRoster.add(element));
+    heavySupport.forEach((element) => orderedRoster.add(element));
+    flyer.forEach((element) => orderedRoster.add(element));
+    low.forEach((element) => orderedRoster.add(element));
+
+    roster = orderedRoster;
   }
 }
