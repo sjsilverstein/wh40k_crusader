@@ -25,7 +25,7 @@ class HomeViewModel extends StreamViewModel<List<CrusadeDataModel>> {
     super.onData(data);
   }
 
-  logoff() async {
+  void logoff() async {
     logger.i("Logging Out");
     await _firebaseAuth.logout();
     _navigationService.replaceWith(rNavigationRoutes.LoginRoute);
@@ -37,7 +37,7 @@ class HomeViewModel extends StreamViewModel<List<CrusadeDataModel>> {
         arguments: crusade);
   }
 
-  navigateToNewCrusadeForm() {
+  void navigateToNewCrusadeForm() {
     _navigationService.navigateTo(rNavigationRoutes.NewCrusade);
   }
 

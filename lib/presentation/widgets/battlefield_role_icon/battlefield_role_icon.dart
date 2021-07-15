@@ -47,7 +47,7 @@ class BattleFieldRoleIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 75,
+      width: 85,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

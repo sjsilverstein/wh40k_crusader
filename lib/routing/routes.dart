@@ -5,4 +5,5 @@ class rNavigationRoutes {
   static const String StartUpRoute = '/startUp';
   static const String CrusadeRoute = '/crusade';
   static const String NewCrusade = '/createCrusade';
+  static const String CreateUnitRoute = '/createUnit';
 }

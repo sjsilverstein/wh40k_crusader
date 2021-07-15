@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
+import 'package:wh40k_crusader/presentation/views/crusade_view/crusade_view_model.dart';
 import 'package:wh40k_crusader/presentation/widgets/battlefield_role_icon/battlefield_role_icon.dart';
 
-class CrusadeUnitCard extends StatelessWidget {
+class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
   final CrusadeUnitDataModel unit;
   CrusadeUnitCard(this.unit);
 
@@ -25,7 +27,7 @@ class CrusadeUnitCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, CrusadeViewModel model) {
     return Card(
       child: ExpansionTile(
         title: Text('${unit.unitName} - ${unit.unitType}'),
@@ -37,6 +39,20 @@ class CrusadeUnitCard extends StatelessWidget {
           ),
         ),
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  model.dropUnitFromCrusadeRoster(unit);
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                ),
+                child: Icon(Icons.delete),
+              )
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

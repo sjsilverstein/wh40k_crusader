@@ -63,7 +63,7 @@ class FirestoreService {
 
   Future deleteCrusade(CrusadeDataModel crusade) async {
     logger.w('Firestore: Deleting Crusade');
-    await deleteRoster(crusade.documentUID!);
+    await deleteRoster(crusade);
 
     await _crusadeCollectionRef
         .doc(crusade.documentUID)
@@ -130,10 +130,10 @@ class FirestoreService {
     return roster;
   }
 
-  Future<void> deleteRoster(String crusadeUID) async {
-    logger.i('Deleting Crusade : $crusadeUID roster');
+  Future<void> deleteRoster(CrusadeDataModel crusade) async {
+    logger.i('Deleting Crusade : ${crusade.name} roster');
     var rosterRef = _crusadeCollectionRef
-        .doc(crusadeUID)
+        .doc(crusade.documentUID)
         .collection(rosterCollectionName)
         .withConverter<CrusadeUnitDataModel>(
           fromFirestore: (snapshot, _) =>
@@ -145,15 +145,16 @@ class FirestoreService {
         await rosterRef.get().then((snapshot) => snapshot.docs);
 
     rosterSnapshot.forEach((element) => deleteRemoveUnitFromRoster(
-        crusadeUID: crusadeUID, unitUID: element.id));
+        crusade: crusade, unitToDelete: element.data()));
 
-    await _crusadeCollectionRef.doc(crusadeUID).update({kSupplyUsed: 0});
+    // await _crusadeCollectionRef.doc(crusade.documentUID).update({kSupplyUsed: 0});
   }
 
   Future<void> deleteRemoveUnitFromRoster(
-      {required String crusadeUID, required String unitUID}) async {
+      {required CrusadeDataModel crusade,
+      required CrusadeUnitDataModel unitToDelete}) async {
     var rosterRef = _crusadeCollectionRef
-        .doc(crusadeUID)
+        .doc(crusade.documentUID)
         .collection(rosterCollectionName)
         .withConverter<CrusadeUnitDataModel>(
           fromFirestore: (snapshot, _) =>
@@ -161,11 +162,14 @@ class FirestoreService {
           toFirestore: (unit, _) => unit.toJson(),
         );
 
+    await updateCrusade(crusade.copyWith(
+        supplyUsed: crusade.supplyUsed - unitToDelete.powerRating));
+
     await rosterRef
-        .doc(unitUID)
+        .doc(unitToDelete.documentUID)
         .delete()
-        .then(
-            (value) => logger.w('Firestore: Unit $unitUID removed from roster'))
+        .then((value) => logger.w(
+            'Firestore: Unit ${unitToDelete.documentUID} removed from roster'))
         .catchError((error) => logger.e(error));
   }
 }

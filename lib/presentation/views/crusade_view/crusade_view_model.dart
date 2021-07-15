@@ -7,7 +7,10 @@ import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/app/locator.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
+import 'package:wh40k_crusader/routing/routes.dart';
 import 'package:wh40k_crusader/services/firestore_service.dart';
+
+enum CrusadeViewModelState { showRoster, showEditForm }
 
 class CrusadeViewModel extends BaseViewModel {
   CrusadeDataModel crusade;
@@ -18,7 +21,26 @@ class CrusadeViewModel extends BaseViewModel {
   final editCrusadeValuesFormKey = GlobalKey<FormBuilderState>();
 
   List<CrusadeUnitDataModel> roster = [];
+  CrusadeViewModelState _state = CrusadeViewModelState.showRoster;
+  CrusadeViewModelState get state => _state;
   CrusadeViewModel(this.crusade);
+
+  setState(CrusadeViewModelState state) {
+    setBusy(true);
+    switch (state) {
+      case CrusadeViewModelState.showRoster:
+        logger.i('State Change: Show Roster');
+        break;
+      case CrusadeViewModelState.showEditForm:
+        logger.i('State Change: Show Form');
+        break;
+      default:
+        break;
+    }
+    setBusy(false);
+    _state = state;
+    notifyListeners();
+  }
 
   getCrusadeInfo() async {
     // TODO consider why the form doesn't update on unit added to roster.
@@ -36,8 +58,14 @@ class CrusadeViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  dropUnitFromCrusadeRoster(CrusadeUnitDataModel unitToDrop) async {
+    await _db.deleteRemoveUnitFromRoster(
+        crusade: crusade, unitToDelete: unitToDrop);
+    await getCrusadeInfo();
+  }
+
   _deleteRoster() async {
-    await _db.deleteRoster(crusade.documentUID!);
+    await _db.deleteRoster(crusade);
     await getCrusadeInfo();
   }
 
@@ -78,6 +106,13 @@ class CrusadeViewModel extends BaseViewModel {
   }
 
   updateCrusadeWithData() async {
+    logger.wtf(
+        'req: ${editCrusadeValuesFormKey.currentState!.fields[kRequisition]!.value}');
+    logger.wtf(
+        'Limit: ${editCrusadeValuesFormKey.currentState!.fields[kSupplyLimit]!.value}');
+    logger.wtf(
+        'Used: ${editCrusadeValuesFormKey.currentState!.fields[kSupplyUsed]!.value}');
+
     CrusadeDataModel updatedData = crusade.copyWith(
       requisition: int.parse(
           editCrusadeValuesFormKey.currentState!.fields[kRequisition]!.value),
@@ -91,24 +126,9 @@ class CrusadeViewModel extends BaseViewModel {
     await getCrusadeInfo();
   }
 
-  createGenericUnitForCrusade() async {
-    // TODO perform form validation!!!!
-
-    CrusadeUnitDataModel genericUnit = CrusadeUnitDataModel(
-      unitName: 'Some Fake Unit',
-      battleFieldRole: CrusadeUnitDataModel.battleFieldRoles[1],
-      crusadeFaction: crusade.faction,
-      unitType: "Some Fake Unit Type",
-      powerRating: 10,
-    );
-
-    // TODO Add the unit unit to the crusade.
-    // database service updates both crusade unit roster and available supply based on adding the unit to crusade.
-    await _db.addUnitToCrusadeRoster(crusade, genericUnit);
-
-    await getCrusadeInfo();
-    // after complete update the view with new crusade values and roster units available.
-    // Update the generic unit to a form which adds the unit to the crusade.
+  navigateToCreateNewUnitForm() {
+    _navigationService.navigateTo(rNavigationRoutes.CreateUnitRoute,
+        arguments: crusade);
   }
 
   _orderRoster() {

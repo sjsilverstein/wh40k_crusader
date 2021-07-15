@@ -12,9 +12,9 @@ class CreateCrusadeViewModel extends BaseViewModel {
   final FirebaseAuthenicationService _authentication =
       locator<FirebaseAuthenicationService>();
   final FirestoreService _db = locator<FirestoreService>();
+  final NavigationService _navigationService = locator<NavigationService>();
 
   final formKey = GlobalKey<FormBuilderState>();
-  final NavigationService _navigationService = locator<NavigationService>();
   final String formNameField = kName;
   final String formFactionField = kFaction;
   final String formBattleTallyField = kBattleTally;

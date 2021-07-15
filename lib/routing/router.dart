@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/presentation/views/create_account_view/create_account_view.dart';
+import 'package:wh40k_crusader/presentation/views/create_crusade_unit_view/create_crusade_unit_view.dart';
 import 'package:wh40k_crusader/presentation/views/create_crusade_view/create_crusade_view.dart';
 import 'package:wh40k_crusader/presentation/views/crusade_view/crusade_view.dart';
 import 'package:wh40k_crusader/presentation/views/home_view/home_view.dart';
 import 'package:wh40k_crusader/presentation/views/login_view/login_view.dart';
-import 'package:wh40k_crusader/presentation/views/startup_view/startup_view.dart';
 import 'package:wh40k_crusader/routing/routes.dart';
 
 class Router {
@@ -24,11 +25,6 @@ class Router {
 
         break;
 
-      case rNavigationRoutes.StartUpRoute:
-        pageWidget = StartUpView();
-
-        break;
-
       case rNavigationRoutes.SignUpRoute:
         pageWidget = CreateAccountView();
 
@@ -38,9 +34,15 @@ class Router {
 
         break;
       case rNavigationRoutes.CrusadeRoute:
-        CrusadeDataModel? crusadeArgs = settings.arguments as CrusadeDataModel;
-        pageWidget = CrusadeView(crusadeArgs);
+        CrusadeDataModel? crusade = settings.arguments as CrusadeDataModel;
+        pageWidget = CrusadeView(crusade);
 
+        break;
+      case rNavigationRoutes.CreateUnitRoute:
+        CrusadeDataModel? crusade = settings.arguments as CrusadeDataModel;
+        logger.wtf('Router Crusade : ${crusade.name}');
+
+        pageWidget = CreateUnitView(crusade);
         break;
       case rNavigationRoutes.NewCrusade:
         pageWidget = CreateCrusadeView();

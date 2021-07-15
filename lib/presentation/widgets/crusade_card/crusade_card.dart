@@ -13,7 +13,6 @@ class CrusadeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO consider ViewModelWidget<CrusadeCardModel> as a way to resolve indexing bug.
     return Card(
       child: ExpansionTile(
         leading: FactionIcon(crusade.faction),
