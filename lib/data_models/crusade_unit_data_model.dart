@@ -84,6 +84,7 @@ class CrusadeUnitDataModel {
           unitType: data[kUnitType]! as String,
           powerRating: data[kPowerRating]! as int,
           experience: data[kExperience]! as int,
+          equipment: data[kEquipment] as String,
           crusadePoints: data[kCrusadePoints]! as int,
           battlesPlayed: data[kBattlesPlayed]! as int,
           battlesSurvived: data[kBattlesSurvived]! as int,

@@ -7,8 +7,10 @@ import 'package:wh40k_crusader/routing/routes.dart';
 
 import 'app/locator.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   setupLocator();
   setupDialogUi();
 
@@ -16,32 +18,15 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initialization,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-              child:
-                  Text('Something is Wrong', textDirection: TextDirection.ltr));
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'WH40k Crusader',
-            theme: wh40kAppTheme,
-            navigatorKey: projectRouter.Router.navigatorKey,
-            onGenerateRoute: projectRouter.Router.generateRoute,
-            initialRoute: rNavigationRoutes.LoginRoute,
-            // home: HomeView(),
-          );
-        }
-
-        return CircularProgressIndicator();
-      },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'WH40k Crusader',
+      theme: wh40kAppTheme,
+      navigatorKey: projectRouter.Router.navigatorKey,
+      onGenerateRoute: projectRouter.Router.generateRoute,
+      initialRoute: rNavigationRoutes.LoginRoute,
     );
   }
 }

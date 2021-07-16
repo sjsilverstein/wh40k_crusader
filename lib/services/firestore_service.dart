@@ -144,17 +144,20 @@ class FirestoreService {
     List<QueryDocumentSnapshot<CrusadeUnitDataModel>> rosterSnapshot =
         await rosterRef.get().then((snapshot) => snapshot.docs);
 
-    rosterSnapshot.forEach((element) => deleteRemoveUnitFromRoster(
-        crusade: crusade, unitToDelete: element.data()));
+    rosterSnapshot.forEach((element) =>
+        _removeUnitFromRosterWithOutCrusadeUpdate(
+            crusadeUID: crusade.documentUID!, unitToRemove: element.data()));
 
-    // await _crusadeCollectionRef.doc(crusade.documentUID).update({kSupplyUsed: 0});
+    await _crusadeCollectionRef
+        .doc(crusade.documentUID)
+        .update({kSupplyUsed: 0});
   }
 
-  Future<void> deleteRemoveUnitFromRoster(
-      {required CrusadeDataModel crusade,
-      required CrusadeUnitDataModel unitToDelete}) async {
+  Future<void> _removeUnitFromRosterWithOutCrusadeUpdate(
+      {required String crusadeUID,
+      required CrusadeUnitDataModel unitToRemove}) async {
     var rosterRef = _crusadeCollectionRef
-        .doc(crusade.documentUID)
+        .doc(crusadeUID)
         .collection(rosterCollectionName)
         .withConverter<CrusadeUnitDataModel>(
           fromFirestore: (snapshot, _) =>
@@ -162,14 +165,23 @@ class FirestoreService {
           toFirestore: (unit, _) => unit.toJson(),
         );
 
+    await rosterRef
+        .doc(unitToRemove.documentUID)
+        .delete()
+        .then((value) => logger.w(
+            'Firestore: Unit ${unitToRemove.documentUID} removed from roster'))
+        .catchError((error) => logger.e(error));
+  }
+
+  Future<void> deleteRemoveUnitFromRoster(
+      {required CrusadeDataModel crusade,
+      required CrusadeUnitDataModel unitToDelete}) async {
     await updateCrusade(crusade.copyWith(
         supplyUsed: crusade.supplyUsed - unitToDelete.powerRating));
 
-    await rosterRef
-        .doc(unitToDelete.documentUID)
-        .delete()
-        .then((value) => logger.w(
-            'Firestore: Unit ${unitToDelete.documentUID} removed from roster'))
-        .catchError((error) => logger.e(error));
+    await _removeUnitFromRosterWithOutCrusadeUpdate(
+      crusadeUID: crusade.documentUID!,
+      unitToRemove: unitToDelete,
+    );
   }
 }

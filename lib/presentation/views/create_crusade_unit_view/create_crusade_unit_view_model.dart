@@ -37,27 +37,24 @@ class CreateUnitViewModel extends BaseViewModel {
     // TODO perform form validation!!!!
 
     CrusadeUnitDataModel genericUnit = CrusadeUnitDataModel(
-      unitName: "someFake NAme",
-      battleFieldRole: CrusadeUnitDataModel.battleFieldRoles[1],
-      unitType: 'Some Unit Type',
-      powerRating: 10,
+      unitName: formKey.currentState!.fields[formNameField]!.value,
+      battleFieldRole:
+          formKey.currentState!.fields[formBattleFieldRoleField]!.value,
       crusadeFaction: crusade.faction,
-      // battleFieldRole:
-      //     formKey.currentState!.fields[formBattleFieldRoleField]!.value,
-      // crusadeFaction: crusade.faction,
-      // unitType: formKey.currentState!.fields[formUnitTypeField]!.value,
-      // powerRating: formKey.currentState!.fields[formPowerRatingField]!.value,
-      // experience: formKey.currentState!.fields[formExperienceField]!.value,
-      // battlesPlayed: formKey.currentState!.fields[formBattlePlayedField]!.value,
-      // battlesSurvived:
-      //     formKey.currentState!.fields[formBattlesSurvivedField]!.value,
-      // equipment: formKey.currentState!.fields[formEquipmentField]!.value,
+      unitType: formKey.currentState!.fields[formUnitTypeField]!.value,
+      powerRating: formKey.currentState!.fields[formPowerRatingField]!.value,
+      experience: formKey.currentState!.fields[formExperienceField]!.value,
+      battlesPlayed: formKey.currentState!.fields[formBattlePlayedField]!.value,
+      battlesSurvived:
+          formKey.currentState!.fields[formBattlesSurvivedField]!.value,
+      equipment: formKey.currentState!.fields[formEquipmentField]!.value,
     );
 
     await _db.addUnitToCrusadeRoster(crusade, genericUnit);
 
     // after complete update the view with new crusade values and roster units available.
     // Update the generic unit to a form which adds the unit to the crusade.
+    pop();
   }
 
   pop() {
