@@ -25,7 +25,6 @@ class CrusadeUnitDataModel {
     'Heavy Support',
     'Flyer',
     'Lord of War',
-    'Supreme Commander'
   ];
   String? documentUID;
 
@@ -130,4 +129,41 @@ class CrusadeUnitDataModel {
       kUpdatedAt: FieldValue.serverTimestamp(),
     };
   }
+
+  CrusadeUnitDataModel copyWith({
+    String? unitName,
+    String? unitType,
+    int? powerRating,
+    int? crusadePoints,
+    int? experience,
+    String? battleFieldRole,
+    String? equipment,
+    List<String>? psychicPowers,
+    List<String>? warlordTraits,
+    List<String>? relics,
+    int? battlesPlayed,
+    int? battlesSurvived,
+    List<BattleHonour>? battleHonours,
+    List<BattleScar>? battleScars,
+  }) =>
+      CrusadeUnitDataModel(
+        documentUID: this.documentUID,
+        unitName: unitName ?? this.unitName,
+        battleFieldRole: battleFieldRole ?? this.battleFieldRole,
+        crusadeFaction: this.crusadeFaction,
+        selectableKeywords: this.selectableKeywords,
+        unitType: unitType ?? this.unitType,
+        powerRating: powerRating ?? this.powerRating,
+        crusadePoints: crusadePoints ?? this.crusadePoints,
+        experience: experience ?? this.experience,
+        equipment: equipment ?? this.equipment,
+        psychicPowers: psychicPowers ?? this.psychicPowers,
+        warlordTraits: warlordTraits ?? this.warlordTraits,
+        relics: relics ?? this.relics,
+        battlesPlayed: battlesPlayed ?? this.battlesPlayed,
+        battlesSurvived: battlesSurvived ?? this.battlesSurvived,
+        battleHonours: battleHonours ?? this.battleHonours,
+        battleScars: battleScars ?? this.battleScars,
+        createdAt: this.createdAt,
+      );
 }

@@ -33,13 +33,21 @@ class CrusadeUnitRoster extends ViewModelWidget<CrusadeViewModel> {
                 ],
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: model.roster.length,
-                itemBuilder: (context, index) =>
-                    CrusadeUnitCard(model.roster[index]),
-              ),
-            ),
+            model.dataMap?[kRosterStream] != null
+                ? model.dataMap![kRosterStream].length != 0
+                    ? Expanded(
+                        child: ListView.builder(
+                          itemCount: model.dataMap?[kRosterStream].length,
+                          itemBuilder: (context, index) => CrusadeUnitCard(
+                              model.dataMap?[kRosterStream][index]),
+                        ),
+                      )
+                    : Container(
+                        child: Text('No Units in Roster'),
+                      )
+                : Container(
+                    child: Text('No Units in Roster'),
+                  ),
           ],
         ),
       ),

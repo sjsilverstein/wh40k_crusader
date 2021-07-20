@@ -8,6 +8,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
+      initialiseSpecialViewModelsOnce: true,
       // onModelReady: (model) => model.listenToCrusades(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(

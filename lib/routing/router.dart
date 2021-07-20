@@ -8,7 +8,9 @@ import 'package:wh40k_crusader/presentation/views/create_crusade_view/create_cru
 import 'package:wh40k_crusader/presentation/views/crusade_view/crusade_view.dart';
 import 'package:wh40k_crusader/presentation/views/home_view/home_view.dart';
 import 'package:wh40k_crusader/presentation/views/login_view/login_view.dart';
+import 'package:wh40k_crusader/presentation/views/update_crusade_unit_view/update_crusade_unit_view.dart';
 import 'package:wh40k_crusader/routing/routes.dart';
+import 'package:wh40k_crusader/routing/routing_args.dart';
 
 class Router {
   static GlobalKey<NavigatorState>? navigatorKey = StackedService.navigatorKey;
@@ -36,6 +38,15 @@ class Router {
       case rNavigationRoutes.CrusadeRoute:
         CrusadeDataModel? crusade = settings.arguments as CrusadeDataModel;
         pageWidget = CrusadeView(crusade);
+
+        break;
+      case rNavigationRoutes.UpdateUnitRoute:
+        UpdateCrusadeUnitRouteArgs? args =
+            settings.arguments as UpdateCrusadeUnitRouteArgs;
+        pageWidget = UpdateCrusadeUnitView(
+          crusade: args.crusade,
+          unit: args.unit,
+        );
 
         break;
       case rNavigationRoutes.CreateUnitRoute:

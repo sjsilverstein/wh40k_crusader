@@ -17,7 +17,8 @@ class CrusadeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<CrusadeViewModel>.reactive(
       viewModelBuilder: () => CrusadeViewModel(crusade),
-      onModelReady: (model) async => await model.getCrusadeInfo(),
+      // onModelReady: (model) async => await model.getCrusadeInfo(),
+      initialiseSpecialViewModelsOnce: true,
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: Row(
@@ -48,27 +49,37 @@ class CrusadeView extends StatelessWidget {
             Card(
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Requisition: ${model.crusade.requisition}',
-                        style: TextStyle(
-                            color: model.crusade.requisition > 5
-                                ? Colors.red
-                                : Theme.of(context).textTheme.bodyText1?.color),
-                      ),
-                      Text('Supply Limit: ${model.crusade.supplyLimit}'),
-                      Text(
-                        'Supply Used: ${model.crusade.supplyUsed}',
-                        style: TextStyle(
-                            color: model.crusade.supplyUsed >
-                                    model.crusade.supplyLimit
-                                ? Colors.red
-                                : Colors.green),
-                      ),
-                    ],
-                  ),
+                  model.dataMap?[kCrusadeStream] != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Requisition: ${model.dataMap?[kCrusadeStream].requisition}',
+                              style: TextStyle(
+                                  color: model.dataMap?[kCrusadeStream]
+                                              .requisition >
+                                          5
+                                      ? Colors.red
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color),
+                            ),
+                            Text(
+                                'Supply Limit: ${model.dataMap?[kCrusadeStream].supplyLimit}'),
+                            Text(
+                              'Supply Used: ${model.dataMap?[kCrusadeStream].supplyUsed}',
+                              style: TextStyle(
+                                  color: model.dataMap?[kCrusadeStream]
+                                              .supplyUsed >
+                                          model.dataMap?[kCrusadeStream]
+                                              .supplyLimit
+                                      ? Colors.red
+                                      : Colors.green),
+                            ),
+                          ],
+                        )
+                      : Container(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(

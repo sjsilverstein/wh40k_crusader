@@ -44,6 +44,28 @@ class FirestoreService {
     return _crusadeController.stream;
   }
 
+  Stream<CrusadeDataModel> listenToCrusadeRealTime(
+      {required String crusadeUID}) {
+    return _crusadeCollectionRef
+        .doc(crusadeUID)
+        .snapshots()
+        .map((event) => event.data()!);
+  }
+
+  Stream<List<CrusadeUnitDataModel>> listenToCrusadeRoster(
+      {required String crusadeUID}) {
+    return _crusadeCollectionRef
+        .doc(crusadeUID)
+        .collection(rosterCollectionName)
+        .withConverter<CrusadeUnitDataModel>(
+          fromFirestore: (snapshot, _) =>
+              CrusadeUnitDataModel.fromJson(snapshot.data()!, snapshot.id),
+          toFirestore: (unit, _) => unit.toJson(),
+        )
+        .snapshots()
+        .map((event) => event.docs.map((e) => e.data()).toList());
+  }
+
   Future<List<CrusadeDataModel>> getCrusadeDataOneTime() async {
     List<CrusadeDataModel> crusades = [];
 
@@ -106,6 +128,19 @@ class FirestoreService {
         .doc(crusade.documentUID)
         .collection(rosterCollectionName)
         .add(unit.toJson());
+  }
+
+  Future updateCrusadeUnit({
+    required CrusadeDataModel crusade,
+    required CrusadeUnitDataModel unit,
+  }) async {
+    await updateCrusade(crusade);
+
+    await _crusadeCollectionRef
+        .doc(crusade.documentUID)
+        .collection(rosterCollectionName)
+        .doc(unit.documentUID)
+        .update(unit.toJson());
   }
 
   Future<List<CrusadeUnitDataModel>> getRoster(

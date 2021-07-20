@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
+import 'package:wh40k_crusader/presentation/shared/ui_helpers.dart';
 import 'package:wh40k_crusader/presentation/views/crusade_view/crusade_view_model.dart';
 import 'package:wh40k_crusader/presentation/widgets/battlefield_role_icon/battlefield_role_icon.dart';
 
@@ -42,6 +43,18 @@ class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              ElevatedButton(
+                onPressed: () {
+                  // model.dropUnitFromCrusadeRoster(unit);
+                  model.navigateToUpdateCrusadeUnitView(unit);
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.green),
+                ),
+                child: Icon(Icons.edit),
+              ),
+              HorizontalSpace.small,
               ElevatedButton(
                 onPressed: () {
                   model.dropUnitFromCrusadeRoster(unit);

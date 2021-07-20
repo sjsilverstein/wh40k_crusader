@@ -18,7 +18,7 @@ class FactionIcon extends StatelessWidget {
         assetImage = AssetImage('assets/icons/factions/chaos.png');
         break;
       case 'Aeldari':
-        iconColor = Color(0xFCF2D8);
+        iconColor = Colors.blueGrey;
         assetImage = AssetImage('assets/icons/factions/aeldari.png');
         break;
       case 'Tyranids':
