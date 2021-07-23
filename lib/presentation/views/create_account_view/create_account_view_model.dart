@@ -8,23 +8,31 @@ import 'package:wh40k_crusader/services/firebase_auth_service.dart';
 
 class CreateAccountViewModel extends AuthenticationViewModel {
   final _navigationService = locator<NavigationService>();
-  final _firebaseAuthentication = locator<FirebaseAuthenicationService>();
+  final _firebaseAuthentication = locator<FirebaseAuthenticationService>();
 
-  final _signUpFormKey = GlobalKey<FormBuilderState>();
-  get signUpFormKey => _signUpFormKey;
+  final signUpFormKey = GlobalKey<FormBuilderState>();
 
   final String formEmailField = 'email';
   final String formPasswordField = 'password';
+  final String formConfirmPasswordField = 'confirmPassword';
 
   CreateAccountViewModel() : super(successRoute: rNavigationRoutes.HomeRoute);
 
   String get _emailValue =>
-      _signUpFormKey.currentState!.fields[formEmailField]!.value;
+      signUpFormKey.currentState!.fields[formEmailField]!.value;
   String get _passwordValue =>
-      _signUpFormKey.currentState!.fields[formPasswordField]!.value;
+      signUpFormKey.currentState!.fields[formPasswordField]!.value;
 
   navigateBack() {
     _navigationService.replaceWith(rNavigationRoutes.LoginRoute);
+  }
+
+  saveAndValidate() {
+    bool? isValid = signUpFormKey.currentState?.saveAndValidate();
+
+    if (isValid != null && isValid) {
+      saveData();
+    }
   }
 
   @override

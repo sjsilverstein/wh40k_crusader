@@ -17,27 +17,55 @@ class CreateAccountView extends StatelessWidget {
           mainButtonTitle: 'SIGN UP',
           form: FormBuilder(
             key: model.signUpFormKey,
+            initialValue: {
+              model.formEmailField: '',
+              model.formPasswordField: '',
+              model.formConfirmPasswordField: '',
+            },
             child: Column(
               children: [
-                TextField(
-                  decoration: InputDecoration(labelText: 'Full Name'),
-                ),
                 FormBuilderTextField(
                   name: model.formEmailField,
-                  validator: FormBuilderValidators.required(context),
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.email(context)
+                  ]),
                   decoration: InputDecoration(labelText: 'Email'),
                 ),
                 FormBuilderTextField(
                   name: model.formPasswordField,
-                  validator: FormBuilderValidators.required(context),
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.minLength(context, 6),
+                    FormBuilderValidators.maxLength(context, 14),
+                  ]),
                   decoration: InputDecoration(labelText: 'Password'),
+                ),
+                FormBuilderTextField(
+                  name: model.formConfirmPasswordField,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.minLength(context, 6),
+                    FormBuilderValidators.maxLength(context, 14),
+                    (value) {
+                      model.signUpFormKey.currentState?.save();
+                      if (value !=
+                          model.signUpFormKey.currentState!
+                              .fields[model.formPasswordField]?.value) {
+                        return 'Password and Confirmation must match';
+                      }
+
+                      return null;
+                    }
+                  ]),
+                  decoration: InputDecoration(labelText: 'Confirm Password'),
                 ),
               ],
             ),
           ),
           validationMessage: model.validationMessage,
           showTermsText: true,
-          onMainButtonTapped: () => model.saveData,
+          onMainButtonTapped: () => model.saveAndValidate,
           onBackPressed: () => model.navigateBack,
         ),
       ),

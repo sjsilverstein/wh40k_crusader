@@ -10,8 +10,8 @@ import 'package:wh40k_crusader/services/firebase_auth_service.dart';
 
 class FirestoreService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static final FirebaseAuthenicationService _auth =
-      locator<FirebaseAuthenicationService>();
+  static final FirebaseAuthenticationService _auth =
+      locator<FirebaseAuthenticationService>();
   static const String crusadeCollectionName = 'crusade';
   static const String rosterCollectionName = 'roster';
 
@@ -22,26 +22,13 @@ class FirestoreService {
             toFirestore: (crusade, _) => crusade.toJson(),
           );
 
-  final StreamController<List<CrusadeDataModel>> _crusadeController =
-      StreamController<List<CrusadeDataModel>>.broadcast();
-
   Stream<List<CrusadeDataModel>> listenToCrusadesRealTime() {
     logger.i('Firestore: Started Listening to Crusades In Real Time');
-    _crusadeCollectionRef
+    return _crusadeCollectionRef
         .where(kUserUID, isEqualTo: _auth.currentUser!.uid)
         .orderBy(kCreatedAt, descending: false)
         .snapshots()
-        .listen((crusadeSnapshots) {
-      if (crusadeSnapshots.docs.isNotEmpty) {
-        logger.i('New Crusades Realtime Snapshot');
-        List<CrusadeDataModel> crusades =
-            crusadeSnapshots.docs.map((crusade) => crusade.data()).toList();
-        logger.i('Number of documents ${crusades.length}\n$crusades');
-        _crusadeController.add(crusades);
-      }
-    });
-
-    return _crusadeController.stream;
+        .map((event) => event.docs.map((e) => e.data()).toList());
   }
 
   Stream<CrusadeDataModel> listenToCrusadeRealTime(

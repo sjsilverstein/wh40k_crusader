@@ -1,3 +1,4 @@
+// ignore: camel_case_types
 class rNavigationRoutes {
   static const String LoginRoute = '/';
   static const String SignUpRoute = '/signUp';
@@ -7,4 +8,5 @@ class rNavigationRoutes {
   static const String NewCrusade = '/createCrusade';
   static const String CreateUnitRoute = '/createUnit';
   static const String UpdateUnitRoute = '/updateUnit';
+  static const String AddBattleRoute = '/addBattle';
 }

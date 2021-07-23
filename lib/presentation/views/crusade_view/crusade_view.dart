@@ -13,11 +13,31 @@ class CrusadeView extends StatelessWidget {
 
   CrusadeView(this.crusade);
 
+  Widget _buildFloatingActionButton(CrusadeViewModel model) {
+    switch (model.state) {
+      case CrusadeViewModelState.showRoster:
+        return FloatingActionButton(
+          onPressed: () {
+            model.navigateToCreateNewUnitForm();
+          },
+          child: Icon(Icons.add),
+        );
+      case CrusadeViewModelState.showBattleHistory:
+        return FloatingActionButton(
+          onPressed: () {
+            model.navigateToAddNewBattleForm();
+          },
+          child: Icon(Icons.warning_amber_outlined),
+        );
+      default:
+        return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CrusadeViewModel>.reactive(
       viewModelBuilder: () => CrusadeViewModel(crusade),
-      // onModelReady: (model) async => await model.getCrusadeInfo(),
       initialiseSpecialViewModelsOnce: true,
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
@@ -101,6 +121,15 @@ class CrusadeView extends StatelessWidget {
                                     CrusadeViewModelState.showEditForm);
                               },
                               child: Text('Show Edit Form')),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                model.setState(
+                                    CrusadeViewModelState.showBattleHistory);
+                              },
+                              child: Text('Show Battle History')),
                         )
                       ],
                     ),
@@ -111,19 +140,15 @@ class CrusadeView extends StatelessWidget {
             // EditCrusadeForm(),
             VerticalSpace.small,
 
-            model.state == CrusadeViewModelState.showRoster
-                ? CrusadeUnitRoster()
-                : EditCrusadeForm(),
+            if (model.state == CrusadeViewModelState.showRoster)
+              CrusadeUnitRoster(),
+            if (model.state == CrusadeViewModelState.showEditForm)
+              EditCrusadeForm(),
+            if (model.state == CrusadeViewModelState.showBattleHistory)
+              BattleHistory(),
           ],
         ),
-        floatingActionButton: model.state == CrusadeViewModelState.showRoster
-            ? FloatingActionButton(
-                onPressed: () {
-                  model.navigateToCreateNewUnitForm();
-                },
-                child: Icon(Icons.add),
-              )
-            : Container(),
+        floatingActionButton: _buildFloatingActionButton(model),
       ),
     );
   }
@@ -182,6 +207,16 @@ class EditCrusadeForm extends ViewModelWidget<CrusadeViewModel> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BattleHistory extends ViewModelWidget<CrusadeViewModel> {
+  @override
+  Widget build(BuildContext context, CrusadeViewModel viewModel) {
+    // TODO: implement build
+    return Center(
+      child: Text('Battle History View'),
     );
   }
 }

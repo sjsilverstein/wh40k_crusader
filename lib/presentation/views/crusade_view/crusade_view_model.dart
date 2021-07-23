@@ -9,11 +9,10 @@ import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
 import 'package:wh40k_crusader/routing/routes.dart';
 import 'package:wh40k_crusader/routing/routing_args.dart';
+import 'package:wh40k_crusader/services/crusade_roster_service.dart';
 import 'package:wh40k_crusader/services/firestore_service.dart';
 
-enum CrusadeViewModelState { showRoster, showEditForm }
-const String kCrusadeStream = 'crusade-stream';
-const String kRosterStream = 'roster-stream';
+enum CrusadeViewModelState { showRoster, showEditForm, showBattleHistory }
 
 class CrusadeViewModel extends MultipleStreamViewModel {
   CrusadeDataModel crusade;
@@ -34,7 +33,7 @@ class CrusadeViewModel extends MultipleStreamViewModel {
             onData: (data) => crusade = data),
         kRosterStream: StreamData<List<CrusadeUnitDataModel>>(
             _db.listenToCrusadeRoster(crusadeUID: crusade.documentUID!),
-            transformData: _orderRoster),
+            transformData: CrusadeRosterService.orderRoster),
       };
 
   setState(CrusadeViewModelState state) {
@@ -53,22 +52,6 @@ class CrusadeViewModel extends MultipleStreamViewModel {
     _state = state;
     notifyListeners();
   }
-
-  // getCrusadeInfo() async {
-  //   // TODO consider why the form doesn't update on unit added to roster.
-  //   logger.i("Getting new data for Crusade: ${crusade.documentUID}");
-  //   CrusadeDataModel? newData = await _db.getCrusadeByUID(crusade.documentUID!);
-  //   roster = await _db.getRoster(crusadeUID: crusade.documentUID!);
-  //
-  //   if (newData != null) {
-  //     logger.i("New data for Crusade: ${crusade.documentUID}");
-  //     logger.wtf("${newData.toJSONString()}");
-  //     crusade = newData;
-  //     // _updateCrusadeFormFieldsValues();
-  //   }
-  //   _orderRoster();
-  //   notifyListeners();
-  // }
 
   dropUnitFromCrusadeRoster(CrusadeUnitDataModel unitToDrop) async {
     DialogResponse? response = await _dialogService.showConfirmationDialog(
@@ -155,66 +138,15 @@ class CrusadeViewModel extends MultipleStreamViewModel {
         arguments: crusade);
   }
 
+  navigateToAddNewBattleForm() {
+    _navigationService.navigateTo(rNavigationRoutes.AddBattleRoute,
+        arguments: crusade);
+  }
+
   navigateToUpdateCrusadeUnitView(CrusadeUnitDataModel unit) {
     _navigationService.navigateTo(
       rNavigationRoutes.UpdateUnitRoute,
       arguments: UpdateCrusadeUnitRouteArgs(crusade, unit),
     );
-  }
-
-  _orderRoster(List<CrusadeUnitDataModel> roster) {
-    List<CrusadeUnitDataModel> hqs = [];
-    List<CrusadeUnitDataModel> elites = [];
-    List<CrusadeUnitDataModel> troops = [];
-    List<CrusadeUnitDataModel> transport = [];
-    List<CrusadeUnitDataModel> fastAttack = [];
-    List<CrusadeUnitDataModel> heavySupport = [];
-    List<CrusadeUnitDataModel> flyer = [];
-    List<CrusadeUnitDataModel> low = [];
-    // Sort in Descending Experience Order
-    roster.sort((b, a) => a.experience.compareTo(b.experience));
-
-    roster.forEach((element) {
-      if (element.battleFieldRole == CrusadeUnitDataModel.battleFieldRoles[0]) {
-        hqs.add(element);
-      } else if (element.battleFieldRole ==
-          CrusadeUnitDataModel.battleFieldRoles[1]) {
-        elites.add(element);
-      } else if (element.battleFieldRole ==
-          CrusadeUnitDataModel.battleFieldRoles[2]) {
-        troops.add(element);
-      } else if (element.battleFieldRole ==
-          CrusadeUnitDataModel.battleFieldRoles[3]) {
-        transport.add(element);
-      } else if (element.battleFieldRole ==
-          CrusadeUnitDataModel.battleFieldRoles[4]) {
-        fastAttack.add(element);
-      } else if (element.battleFieldRole ==
-          CrusadeUnitDataModel.battleFieldRoles[5]) {
-        heavySupport.add(element);
-      } else if (element.battleFieldRole ==
-          CrusadeUnitDataModel.battleFieldRoles[6]) {
-        flyer.add(element);
-      } else if (element.battleFieldRole ==
-          CrusadeUnitDataModel.battleFieldRoles[7]) {
-        low.add(element);
-      } else {
-        logger.wtf("We have a unit with an unknown battlefield role");
-      }
-    });
-
-    List<CrusadeUnitDataModel> orderedRoster = [];
-    hqs.forEach((element) => orderedRoster.add(element));
-    elites.forEach((element) => orderedRoster.add(element));
-    troops.forEach((element) => orderedRoster.add(element));
-    transport.forEach((element) => orderedRoster.add(element));
-    fastAttack.forEach((element) => orderedRoster.add(element));
-    heavySupport.forEach((element) => orderedRoster.add(element));
-    flyer.forEach((element) => orderedRoster.add(element));
-    low.forEach((element) => orderedRoster.add(element));
-
-    roster.clear();
-    orderedRoster.forEach((element) => roster.add(element));
-    notifyListeners();
   }
 }

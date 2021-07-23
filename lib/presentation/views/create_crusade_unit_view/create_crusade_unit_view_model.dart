@@ -6,12 +6,9 @@ import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/app/locator.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
-import 'package:wh40k_crusader/services/firebase_auth_service.dart';
 import 'package:wh40k_crusader/services/firestore_service.dart';
 
 class CreateUnitViewModel extends BaseViewModel {
-  final FirebaseAuthenicationService _authentication =
-      locator<FirebaseAuthenicationService>();
   final FirestoreService _db = locator<FirestoreService>();
 
   final NavigationService _navigationService = locator<NavigationService>();
@@ -34,27 +31,28 @@ class CreateUnitViewModel extends BaseViewModel {
 
   CreateUnitViewModel(this._crusade);
   createUnitForCrusadeAndPop() async {
-    // TODO perform form validation!!!!
+    if (formKey.currentState!.saveAndValidate()) {
+      CrusadeUnitDataModel genericUnit = CrusadeUnitDataModel(
+        unitName: formKey.currentState!.fields[formNameField]!.value,
+        battleFieldRole:
+            formKey.currentState!.fields[formBattleFieldRoleField]!.value,
+        crusadeFaction: crusade.faction,
+        unitType: formKey.currentState!.fields[formUnitTypeField]!.value,
+        powerRating: formKey.currentState!.fields[formPowerRatingField]!.value,
+        experience: formKey.currentState!.fields[formExperienceField]!.value,
+        battlesPlayed:
+            formKey.currentState!.fields[formBattlePlayedField]!.value,
+        battlesSurvived:
+            formKey.currentState!.fields[formBattlesSurvivedField]!.value,
+        equipment: formKey.currentState!.fields[formEquipmentField]!.value,
+      );
 
-    CrusadeUnitDataModel genericUnit = CrusadeUnitDataModel(
-      unitName: formKey.currentState!.fields[formNameField]!.value,
-      battleFieldRole:
-          formKey.currentState!.fields[formBattleFieldRoleField]!.value,
-      crusadeFaction: crusade.faction,
-      unitType: formKey.currentState!.fields[formUnitTypeField]!.value,
-      powerRating: formKey.currentState!.fields[formPowerRatingField]!.value,
-      experience: formKey.currentState!.fields[formExperienceField]!.value,
-      battlesPlayed: formKey.currentState!.fields[formBattlePlayedField]!.value,
-      battlesSurvived:
-          formKey.currentState!.fields[formBattlesSurvivedField]!.value,
-      equipment: formKey.currentState!.fields[formEquipmentField]!.value,
-    );
+      await _db.addUnitToCrusadeRoster(crusade, genericUnit);
 
-    await _db.addUnitToCrusadeRoster(crusade, genericUnit);
-
-    // after complete update the view with new crusade values and roster units available.
-    // Update the generic unit to a form which adds the unit to the crusade.
-    pop();
+      // after complete update the view with new crusade values and roster units available.
+      // Update the generic unit to a form which adds the unit to the crusade.
+      pop();
+    }
   }
 
   pop() {

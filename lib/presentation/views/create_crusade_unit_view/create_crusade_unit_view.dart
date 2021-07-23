@@ -20,7 +20,7 @@ class CreateUnitView extends StatelessWidget {
           title: Text("Create Unit View"),
         ),
         body: Container(
-          child: Center(
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -45,6 +45,8 @@ class CreateUnitView extends StatelessWidget {
                           ),
                           FormBuilderDropdown(
                               name: model.formBattleFieldRoleField,
+                              validator:
+                                  FormBuilderValidators.required(context),
                               decoration: InputDecoration(
                                 labelText: 'Battle Field Role',
                               ),

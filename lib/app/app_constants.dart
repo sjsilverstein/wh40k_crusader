@@ -36,3 +36,20 @@ const String kBattlesPlayed = 'battlesPlayed';
 const String kBattlesSurvived = 'battlesSurvived';
 const String kBattleHonors = 'battlesHonors';
 const String kBattleScars = 'battleScars';
+
+// Battles
+
+const String kBattleDate = 'battleDate';
+const String kBattleSize = 'battleSize';
+const String kBattlePowerLevel = 'battlePowerLevel';
+const String kMission = 'mission';
+const String kOpponentName = 'opponentName';
+const String kOpponentFaction = 'opponentFaction';
+const String kScore = 'score';
+const String kOpponentScore = 'opponentScore';
+const String kNotes = 'notes';
+
+//
+
+const String kCrusadeStream = 'crusade-stream';
+const String kRosterStream = 'roster-stream';

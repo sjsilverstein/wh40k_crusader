@@ -8,7 +8,7 @@ import 'package:wh40k_crusader/services/firebase_auth_service.dart';
 
 class LoginViewModel extends AuthenticationViewModel {
   final _firebaseAuthenticationService =
-      locator<FirebaseAuthenicationService>();
+      locator<FirebaseAuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
   final _loginFormKey = GlobalKey<FormBuilderState>();

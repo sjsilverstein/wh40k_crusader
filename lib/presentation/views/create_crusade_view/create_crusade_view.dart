@@ -15,7 +15,7 @@ class CreateCrusadeView extends StatelessWidget {
         appBar: AppBar(
           title: Text('New Crusade'),
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -34,6 +34,7 @@ class CreateCrusadeView extends StatelessWidget {
                         ),
                         FormBuilderDropdown(
                             name: model.formFactionField,
+                            validator: FormBuilderValidators.required(context),
                             decoration: InputDecoration(
                               labelText: 'Faction',
                             ),

@@ -12,7 +12,7 @@ class LoginView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         body: AuthenticationLayout(
           busy: model.isBusy,
-          title: 'Welcome',
+          title: 'Welcome to WH40K Crusader',
           subtitle: 'Enter your email address to sign in.',
           form: FormBuilder(
             key: model.loginFormKey,
@@ -41,9 +41,6 @@ class LoginView extends StatelessWidget {
           validationMessage: model.validationMessage,
           onMainButtonTapped: () => model.saveData,
           onCreateAccountTapped: () => model.navigateToSignUp,
-          onForgotPassword: () {
-            // TODO implement password recovery
-          },
         ),
       ),
     );

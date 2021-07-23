@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
+import 'package:wh40k_crusader/presentation/views/add_battle_view/add_battle_view.dart';
 import 'package:wh40k_crusader/presentation/views/create_account_view/create_account_view.dart';
 import 'package:wh40k_crusader/presentation/views/create_crusade_unit_view/create_crusade_unit_view.dart';
 import 'package:wh40k_crusader/presentation/views/create_crusade_view/create_crusade_view.dart';
@@ -54,6 +55,12 @@ class Router {
         logger.wtf('Router Crusade : ${crusade.name}');
 
         pageWidget = CreateUnitView(crusade);
+        break;
+      case rNavigationRoutes.AddBattleRoute:
+        CrusadeDataModel? crusade = settings.arguments as CrusadeDataModel;
+        logger.wtf('Router Crusade : ${crusade.name}');
+
+        pageWidget = AddBattleView(crusade);
         break;
       case rNavigationRoutes.NewCrusade:
         pageWidget = CreateCrusadeView();

@@ -9,9 +9,8 @@ import 'package:wh40k_crusader/services/firestore_service.dart';
 
 class HomeViewModel extends StreamViewModel<List<CrusadeDataModel>> {
   final NavigationService _navigationService = locator<NavigationService>();
-  final _firebaseAuth = locator<FirebaseAuthenicationService>();
+  final _firebaseAuth = locator<FirebaseAuthenticationService>();
   final FirestoreService _db = locator<FirestoreService>();
-  final DialogService _dialogService = locator<DialogService>();
 
   Stream<List<CrusadeDataModel>> get stream => _db.listenToCrusadesRealTime();
 

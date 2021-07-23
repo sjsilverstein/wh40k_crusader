@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:wh40k_crusader/app/app_logger.dart';
 
-class FirebaseAuthenicationService {
+class FirebaseAuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  String? _pendingEmail;
+  // String? _pendingEmail;
   AuthCredential? _pendingCredential;
 
   /// Returns the current logged in Firebase User
@@ -44,7 +45,7 @@ class FirebaseAuthenicationService {
       return FirebaseAuthenticationResult.error(
           errorMessage: getErrorMessageFromFirebaseException(e));
     } on Exception catch (e) {
-      // log?.e('A general exception has occured. $e');
+      logger.e('A general exception has occured. $e');
       return FirebaseAuthenticationResult.error(
           errorMessage:
               'We could not log into your account at this time. Please try again.');
@@ -72,7 +73,7 @@ class FirebaseAuthenicationService {
       return FirebaseAuthenticationResult.error(
           errorMessage: getErrorMessageFromFirebaseException(e));
     } on Exception catch (e) {
-      // log?.e('A general exception has occured. $e');
+      logger.e('A general exception has occured. $e');
       return FirebaseAuthenticationResult.error(
           errorMessage:
               'We could not create your account at this time. Please try again.');
@@ -93,7 +94,7 @@ class FirebaseAuthenicationService {
   }
 
   void _clearPendingData() {
-    _pendingEmail = null;
+    // _pendingEmail = null;
     _pendingCredential = null;
   }
 }

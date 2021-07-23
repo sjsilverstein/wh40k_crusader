@@ -11,7 +11,6 @@ import 'package:wh40k_crusader/services/firestore_service.dart';
 class UpdateCrusadeUnitViewModel extends BaseViewModel {
   final _db = locator<FirestoreService>();
   final _navigationService = locator<NavigationService>();
-  final _dialogService = locator<DialogService>();
   final formKey = GlobalKey<FormBuilderState>();
 
   final String formNameField = kName;

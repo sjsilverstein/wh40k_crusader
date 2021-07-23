@@ -9,8 +9,7 @@ import 'package:wh40k_crusader/services/firebase_auth_service.dart';
 import 'package:wh40k_crusader/services/firestore_service.dart';
 
 class CreateCrusadeViewModel extends BaseViewModel {
-  final FirebaseAuthenicationService _authentication =
-      locator<FirebaseAuthenicationService>();
+  final _authentication = locator<FirebaseAuthenticationService>();
   final FirestoreService _db = locator<FirestoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
@@ -27,19 +26,21 @@ class CreateCrusadeViewModel extends BaseViewModel {
   String get faction => formKey.currentState!.fields[formFactionField]!.value;
 
   createCrusade() async {
-    CrusadeDataModel crusade = CrusadeDataModel(
-      userUID: _authentication.currentUser!.uid,
-      name: formKey.currentState!.fields[formNameField]!.value,
-      faction: formKey.currentState!.fields[formFactionField]!.value,
-      requisition: formKey.currentState!.fields[formRequisitionField]!.value,
-      supplyLimit: formKey.currentState!.fields[formSupplyLimitField]!.value,
-      supplyUsed: formKey.currentState!.fields[formSupplyUsedField]!.value,
-      battleTally: formKey.currentState!.fields[formBattleTallyField]!.value,
-      victories: formKey.currentState!.fields[formVictoriesField]!.value,
-    );
+    if (formKey.currentState!.saveAndValidate()) {
+      CrusadeDataModel crusade = CrusadeDataModel(
+        userUID: _authentication.currentUser!.uid,
+        name: formKey.currentState!.fields[formNameField]!.value,
+        faction: formKey.currentState!.fields[formFactionField]!.value,
+        requisition: formKey.currentState!.fields[formRequisitionField]!.value,
+        supplyLimit: formKey.currentState!.fields[formSupplyLimitField]!.value,
+        supplyUsed: formKey.currentState!.fields[formSupplyUsedField]!.value,
+        battleTally: formKey.currentState!.fields[formBattleTallyField]!.value,
+        victories: formKey.currentState!.fields[formVictoriesField]!.value,
+      );
 
-    await _db.createNewCrusade(crusade);
-    pop();
+      await _db.createNewCrusade(crusade);
+      pop();
+    }
   }
 
   pop() {
