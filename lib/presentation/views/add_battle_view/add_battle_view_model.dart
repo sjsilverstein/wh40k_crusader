@@ -10,7 +10,11 @@ import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
 import 'package:wh40k_crusader/services/crusade_roster_service.dart';
 import 'package:wh40k_crusader/services/firestore_service.dart';
 
-enum AddBattleViewModelState { initial, roster, honors }
+enum AddBattleViewModelState {
+  initial,
+  roster,
+  honors,
+}
 
 class AddBattleViewModel extends MultipleStreamViewModel {
   final _db = locator<FirestoreService>();
@@ -32,8 +36,11 @@ class AddBattleViewModel extends MultipleStreamViewModel {
   String? mission;
   String? notes;
 
-  List<CrusadeUnitDataModel>? battleRoster;
-  List<CrusadeUnitBattlePerformanceDataModel>? rosterPerformance;
+  List<CrusadeUnitDataModel> battleRoster = [];
+  List<CrusadeUnitBattlePerformanceDataModel> rosterPerformance = [];
+
+  String? _markedForGreatnessUnitUID;
+  String? get markedForGreatnessUnitUID => _markedForGreatnessUnitUID;
 
   AddBattleViewModel(this.crusade);
 
@@ -46,6 +53,32 @@ class AddBattleViewModel extends MultipleStreamViewModel {
             _db.listenToCrusadeRoster(crusadeUID: crusade.documentUID!),
             transformData: CrusadeRosterService.orderRoster),
       };
+
+  addUnitToBattleRoster(CrusadeUnitDataModel unit, bool isChecked) {
+    logger.i('${unit.unitName} isChecked : $isChecked');
+
+    if (isChecked) {
+      // Add unit to Battle Roster
+
+      battleRoster.add(unit);
+    } else {
+      // remove unit from Battle Roster
+      battleRoster.remove(unit);
+    }
+
+    CrusadeRosterService.orderRoster(battleRoster);
+    notifyListeners();
+  }
+
+  markedForGreatness(bool value, String unitUID) {
+    if (!value && _markedForGreatnessUnitUID == unitUID) {
+      _markedForGreatnessUnitUID = null;
+    }
+    if (value) {
+      _markedForGreatnessUnitUID = unitUID;
+    }
+    notifyListeners();
+  }
 
   _changeViewState(AddBattleViewModelState state) {
     busy(true);
@@ -65,6 +98,21 @@ class AddBattleViewModel extends MultipleStreamViewModel {
     }
     busy(false);
     notifyListeners();
+  }
+
+  battleDetailsForm() {
+    _changeViewState(AddBattleViewModelState.initial);
+  }
+
+  selectHonours() {
+    _changeViewState(AddBattleViewModelState.honors);
+  }
+
+  recordBattle() {
+    //adjust units based on performance
+    // write to firebase new units values
+    // write to firebase the battle record
+    // pop form off stack and navigate to show units updated stats.
   }
 
   selectRoster() {

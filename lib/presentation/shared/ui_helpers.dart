@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wh40k_crusader/app/app_constants.dart';
 
 class HorizontalSpace {
   static const Widget tiny = SizedBox(width: 5.0);
@@ -23,3 +24,22 @@ double screenWidthPercentage(BuildContext context, {double percentage = 1}) =>
     screenWidth(context) * percentage;
 double screenHeightPercentage(BuildContext context, {double percentage = 1}) =>
     screenHeight(context) * percentage;
+
+class GetColorFrom {
+  static Color unitRank(String rank) {
+    switch (rank) {
+      case kUnitRankBattleReady:
+        return Colors.green;
+      case kUnitRankBlooded:
+        return Colors.redAccent;
+      case kUnitRankBattleHardened:
+        return Colors.blueAccent;
+      case kUnitRankHeroic:
+        return Colors.purple;
+      case kUnitRankLegendary:
+        return Colors.orange;
+      default:
+        return Colors.white;
+    }
+  }
+}
