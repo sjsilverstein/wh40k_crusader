@@ -9,6 +9,7 @@ import 'package:wh40k_crusader/presentation/views/create_crusade_view/create_cru
 import 'package:wh40k_crusader/presentation/views/crusade_view/crusade_view.dart';
 import 'package:wh40k_crusader/presentation/views/home_view/home_view.dart';
 import 'package:wh40k_crusader/presentation/views/login_view/login_view.dart';
+import 'package:wh40k_crusader/presentation/views/update_battle_and_unit_performance_view/update_battle_and_unit_performance_view.dart';
 import 'package:wh40k_crusader/presentation/views/update_crusade_unit_view/update_crusade_unit_view.dart';
 import 'package:wh40k_crusader/routing/routes.dart';
 import 'package:wh40k_crusader/routing/routing_args.dart';
@@ -64,6 +65,16 @@ class Router {
         break;
       case rNavigationRoutes.NewCrusade:
         pageWidget = CreateCrusadeView();
+        break;
+
+      case rNavigationRoutes.UpdateBattleAndUnitPerformanceRoute:
+        UpdateBattleAndUnitPerformanceRouteArgs? args =
+            settings.arguments as UpdateBattleAndUnitPerformanceRouteArgs;
+        pageWidget = UpdateBattleAndUnitPerformanceView(
+          crusade: args.crusade,
+          battle: args.battle,
+          roster: args.roster,
+        );
         break;
 
       default:

@@ -121,7 +121,7 @@ class AddBattleViewModel extends MultipleStreamViewModel {
     battleRoster.forEach((element) {
       int unitsDestroyed = formKey
           .currentState!.fields['${element.documentUID}unitsDestroyed']!.value;
-      int bonusXp =
+      int bonusXP =
           formKey.currentState!.fields['${element.documentUID}bonusXP']!.value;
       bool wasDestroyed = formKey
           .currentState!.fields['${element.documentUID}wasDestroyed']!.value;
@@ -131,7 +131,7 @@ class AddBattleViewModel extends MultipleStreamViewModel {
       battleRosterPerformance.add(CrusadeUnitBattlePerformanceDataModel(
           unit: element,
           unitsDestroyed: unitsDestroyed,
-          bonusXp: bonusXp,
+          bonusXP: bonusXP,
           wasDestroyed: wasDestroyed,
           markedForGreatness: markedForGreatness));
     });
@@ -148,7 +148,7 @@ class AddBattleViewModel extends MultipleStreamViewModel {
             ? element.unit!.experience +
                 4 +
                 (element.unitsDestroyed % 3) +
-                element.bonusXp
+                element.bonusXP
             : element.unit!.experience + 1,
       ));
     });

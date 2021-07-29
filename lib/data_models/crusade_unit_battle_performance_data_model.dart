@@ -6,7 +6,7 @@ class CrusadeUnitBattlePerformanceDataModel {
 
   String? documentUID;
   int unitsDestroyed;
-  int bonusXp;
+  int bonusXP;
   bool wasDestroyed;
   bool markedForGreatness;
 
@@ -14,7 +14,7 @@ class CrusadeUnitBattlePerformanceDataModel {
     this.documentUID,
     this.unit,
     required this.unitsDestroyed,
-    required this.bonusXp,
+    required this.bonusXP,
     required this.wasDestroyed,
     required this.markedForGreatness,
   });
@@ -24,7 +24,7 @@ class CrusadeUnitBattlePerformanceDataModel {
       : this(
           documentUID: documentUID,
           unitsDestroyed: data[kUnitsDestroyed] as int,
-          bonusXp: data[kBonusXP] as int,
+          bonusXP: data[kBonusXP] as int,
           wasDestroyed: data[kWasDestroyed] as bool,
           markedForGreatness: data[kMarkedForGreatness] as bool,
         );
@@ -32,7 +32,7 @@ class CrusadeUnitBattlePerformanceDataModel {
   Map<String, Object> toJson() {
     return {
       kUnitsDestroyed: unitsDestroyed,
-      kBonusXP: bonusXp,
+      kBonusXP: bonusXP,
       kWasDestroyed: wasDestroyed,
       kMarkedForGreatness: markedForGreatness,
     };

@@ -60,6 +60,17 @@ class BattleRecordCard extends ViewModelWidget<CrusadeViewModel> {
             children: [
               ElevatedButton(
                 onPressed: () {
+                  model.navigateToUpdateBattleAndUnitPerformanceView(battle);
+                },
+                child: Icon(Icons.edit),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.green),
+                ),
+              ),
+              HorizontalSpace.large,
+              ElevatedButton(
+                onPressed: () {
                   model.showDeleteBattleConfirmationDialog(battle);
                 },
                 child: Icon(Icons.delete),

@@ -9,4 +9,6 @@ class rNavigationRoutes {
   static const String CreateUnitRoute = '/createUnit';
   static const String UpdateUnitRoute = '/updateUnit';
   static const String AddBattleRoute = '/addBattle';
+  static const String UpdateBattleAndUnitPerformanceRoute =
+      '/updateBattleAndUnitPerformance';
 }

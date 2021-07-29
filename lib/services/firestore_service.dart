@@ -254,6 +254,25 @@ class FirestoreService {
     });
   }
 
+  Future<List<CrusadeUnitBattlePerformanceDataModel>> getBattleUnitPerformances(
+      CrusadeDataModel crusade, BattleDataModel battle) async {
+    QuerySnapshot<CrusadeUnitBattlePerformanceDataModel> query =
+        await _crusadeCollectionRef
+            .doc(crusade.documentUID)
+            .collection(battlesCollectionName)
+            .doc(battle.documentUID)
+            .collection(unitPerformanceCollectionName)
+            .withConverter<CrusadeUnitBattlePerformanceDataModel>(
+              fromFirestore: (snapshot, _) =>
+                  CrusadeUnitBattlePerformanceDataModel.fromJson(
+                      snapshot.data()!, snapshot.id),
+              toFirestore: (unitPerformance, _) => unitPerformance.toJson(),
+            )
+            .get();
+
+    return query.docs.map((e) => e.data()).toList();
+  }
+
   Future<void> _deleteAllBattles(CrusadeDataModel crusade) async {
     CollectionReference<BattleDataModel> battlesRef = _crusadeCollectionRef
         .doc(crusade.documentUID)

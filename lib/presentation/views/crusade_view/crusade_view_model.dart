@@ -90,7 +90,7 @@ class CrusadeViewModel extends MultipleStreamViewModel {
     // await getCrusadeInfo();
   }
 
-  Future _deleteCrusadeDocument() async {
+  _deleteCrusadeDocument() async {
     await _deleteRoster();
     await _db.deleteCrusade(crusade);
     _navigationService.back();
@@ -184,6 +184,14 @@ class CrusadeViewModel extends MultipleStreamViewModel {
     _navigationService.navigateTo(
       rNavigationRoutes.UpdateUnitRoute,
       arguments: UpdateCrusadeUnitRouteArgs(crusade, unit),
+    );
+  }
+
+  navigateToUpdateBattleAndUnitPerformanceView(BattleDataModel battle) {
+    _navigationService.navigateTo(
+      rNavigationRoutes.UpdateBattleAndUnitPerformanceRoute,
+      arguments: UpdateBattleAndUnitPerformanceRouteArgs(crusade, battle,
+          dataMap![kRosterStream] as List<CrusadeUnitDataModel>),
     );
   }
 }
