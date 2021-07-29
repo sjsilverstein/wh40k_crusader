@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
 import 'package:wh40k_crusader/presentation/shared/ui_helpers.dart';
 import 'package:wh40k_crusader/presentation/views/add_battle_view/add_battle_view_model.dart';
@@ -55,7 +56,9 @@ class BattleRosterUnitPerformanceCard
                 initialValue: false,
                 tristate: false,
                 controlAffinity: ListTileControlAffinity.trailing,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  logger.d('Value set to :$value');
+                },
               ),
             ),
             SizedBox(

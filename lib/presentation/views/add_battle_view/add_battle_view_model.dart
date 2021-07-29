@@ -1,11 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/app/locator.dart';
 import 'package:wh40k_crusader/data_models/battle_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
+import 'package:wh40k_crusader/data_models/crusade_unit_battle_performance_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
 import 'package:wh40k_crusader/services/crusade_roster_service.dart';
 import 'package:wh40k_crusader/services/firestore_service.dart';
@@ -18,6 +20,7 @@ enum AddBattleViewModelState {
 
 class AddBattleViewModel extends MultipleStreamViewModel {
   final _db = locator<FirestoreService>();
+  final _navigationService = locator<NavigationService>();
 
   CrusadeDataModel crusade;
 
@@ -108,11 +111,74 @@ class AddBattleViewModel extends MultipleStreamViewModel {
     _changeViewState(AddBattleViewModelState.honors);
   }
 
-  recordBattle() {
-    //adjust units based on performance
-    // write to firebase new units values
-    // write to firebase the battle record
-    // pop form off stack and navigate to show units updated stats.
+  recordBattle() async {
+    BattleDataModel battle;
+    List<CrusadeUnitBattlePerformanceDataModel> battleRosterPerformance = [];
+    List<CrusadeUnitDataModel> battleRosterUpdatedUnitData = [];
+
+    formKey.currentState?.saveAndValidate();
+    //Get unit performance from form data
+    battleRoster.forEach((element) {
+      int unitsDestroyed = formKey
+          .currentState!.fields['${element.documentUID}unitsDestroyed']!.value;
+      int bonusXp =
+          formKey.currentState!.fields['${element.documentUID}bonusXP']!.value;
+      bool wasDestroyed = formKey
+          .currentState!.fields['${element.documentUID}wasDestroyed']!.value;
+      bool markedForGreatness =
+          markedForGreatnessUnitUID == element.documentUID ? true : false;
+
+      battleRosterPerformance.add(CrusadeUnitBattlePerformanceDataModel(
+          unit: element,
+          unitsDestroyed: unitsDestroyed,
+          bonusXp: bonusXp,
+          wasDestroyed: wasDestroyed,
+          markedForGreatness: markedForGreatness));
+    });
+
+    // Adjust units based on performance
+
+    battleRosterPerformance.forEach((element) {
+      battleRosterUpdatedUnitData.add(element.unit!.copyWith(
+        battlesPlayed: element.unit!.battlesPlayed + 1,
+        battlesSurvived: element.wasDestroyed
+            ? element.unit!.battlesSurvived + 1
+            : element.unit!.battlesSurvived,
+        experience: element.markedForGreatness
+            ? element.unit!.experience +
+                4 +
+                (element.unitsDestroyed % 3) +
+                element.bonusXp
+            : element.unit!.experience + 1,
+      ));
+    });
+
+    battle = BattleDataModel(
+      battleDate: battleDate!,
+      battleSize: battleSize!,
+      battlePowerLevel: battlePowerLevel!,
+      opponentName: opponentName!,
+      opponentFaction: opponentFaction!,
+      score: score!,
+      opponentScore: opponentScore!,
+      mission: mission,
+      notes: notes,
+    );
+
+    // Write to firebase new units values
+    battleRosterUpdatedUnitData.forEach((unit) async {
+      await _db.updateCrusadeUnit(crusade: crusade, unit: unit);
+    });
+
+    // Write to firebase the battle record
+    await _db.recordBattle(
+      crusade: crusade,
+      battle: battle,
+      unitPerformanceList: battleRosterPerformance,
+    );
+
+    // Pop form off stack and navigate to show units updated stats.
+    _navigationService.back();
   }
 
   selectRoster() {
@@ -133,23 +199,4 @@ class AddBattleViewModel extends MultipleStreamViewModel {
       _changeViewState(AddBattleViewModelState.roster);
     }
   }
-
-  // _recordBattle() {
-  //   BattleDataModel battle;
-  //
-  //   battle = BattleDataModel(
-  //     battleDate: battleDate!,
-  //     battlePowerLevel: battlePowerLevel!,
-  //     battleSize: battleSize!,
-  //     opponentName: opponentName!,
-  //     opponentFaction: opponentFaction!,
-  //     score: score!,
-  //     opponentScore: opponentScore!,
-  //     mission: mission,
-  //     notes: notes,
-  //   );
-  //
-  //   battle.roster = battleRoster;
-  //   battle.rosterPerformance = rosterPerformance;
-  // }
 }

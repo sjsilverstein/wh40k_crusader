@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/presentation/shared/ui_helpers.dart';
@@ -9,33 +8,30 @@ import 'package:wh40k_crusader/presentation/widgets/battle_roster_unit_check_car
 
 class BattleRoster extends ViewModelWidget<AddBattleViewModel> {
   Widget _buildCrusadeRoster(BuildContext context, AddBattleViewModel model) {
-    return FormBuilder(
-      key: model.formKey,
-      child: Expanded(
-        flex: 1,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text('Crusade Roster'),
-            model.dataMap?[kRosterStream] != null
-                ? model.dataMap![kRosterStream].length != 0
-                    ? SizedBox(
-                        height: screenHeightPercentage(context, percentage: .9),
-                        child: ListView.builder(
-                          itemCount: model.dataMap?[kRosterStream].length,
-                          itemBuilder: (context, index) =>
-                              BattleRosterUnitCheckCard(
-                                  model.dataMap?[kRosterStream][index]),
-                        ),
-                      )
-                    : Container(
-                        child: Text('No Units in Roster'),
-                      )
-                : Container(
-                    child: Text('No Units in Roster'),
-                  ),
-          ],
-        ),
+    return Expanded(
+      flex: 1,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text('Crusade Roster'),
+          model.dataMap?[kRosterStream] != null
+              ? model.dataMap![kRosterStream].length != 0
+                  ? SizedBox(
+                      height: screenHeightPercentage(context, percentage: .9),
+                      child: ListView.builder(
+                        itemCount: model.dataMap?[kRosterStream].length,
+                        itemBuilder: (context, index) =>
+                            BattleRosterUnitCheckCard(
+                                model.dataMap?[kRosterStream][index]),
+                      ),
+                    )
+                  : Container(
+                      child: Text('No Units in Roster'),
+                    )
+              : Container(
+                  child: Text('No Units in Roster'),
+                ),
+        ],
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/presentation/views/add_battle_view/add_battle_view_model.dart';
 import 'package:wh40k_crusader/presentation/widgets/battle_form_details/battle_form_details.dart';
@@ -60,8 +62,15 @@ class AddBattleView extends StatelessWidget {
           appBar: AppBar(
             title: Text('Add Battle'),
           ),
-          body: SingleChildScrollView(
-              child: _buildFormChildBaseOnModelState(model)),
+          body: FormBuilder(
+            key: model.formKey,
+            initialValue: {
+              kNotes: '',
+              kMission: '',
+            },
+            child: SingleChildScrollView(
+                child: _buildFormChildBaseOnModelState(model)),
+          ),
           floatingActionButton: _buildFloatingActionButton(model)),
     );
   }

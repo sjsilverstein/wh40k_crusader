@@ -14,117 +14,109 @@ class BattleFormDetails extends ViewModelWidget<AddBattleViewModel> {
   Widget build(BuildContext context, AddBattleViewModel model) {
     // TODO: implement build
     return Card(
-      child: FormBuilder(
-        key: model.formKey,
-        child: Column(
-          children: [
+      child: Column(
+        children: [
 // Battle Date
-            FormBuilderDateTimePicker(
-              name: kBattleDate,
-              initialValue: DateTime.now(),
-              format: DateFormat('MM-dd-yyyy'),
-              initialEntryMode: DatePickerEntryMode.calendarOnly,
-              inputType: InputType.date,
-              decoration: InputDecoration(labelText: 'Battle Date'),
+          FormBuilderDateTimePicker(
+            name: kBattleDate,
+            initialValue: DateTime.now(),
+            format: DateFormat('MM-dd-yyyy'),
+            initialEntryMode: DatePickerEntryMode.calendarOnly,
+            inputType: InputType.date,
+            decoration: InputDecoration(labelText: 'Battle Date'),
+            validator: FormBuilderValidators.required(context),
+          ),
+          FormBuilderDropdown(
+              name: kBattleSize,
               validator: FormBuilderValidators.required(context),
-            ),
-// required this.battleSize,
-            FormBuilderDropdown(
-                name: kBattleSize,
-                validator: FormBuilderValidators.required(context),
+              decoration: InputDecoration(
+                labelText: 'Battle Size',
+              ),
+              items: BattleDataModel.battleSizes
+                  .map((size) =>
+                      DropdownMenuItem(value: size, child: Text('$size')))
+                  .toList()),
+          SizedBox(
+            width: screenWidthPercentage(context, percentage: .3),
+            child: FormBuilderDropdown(
+                name: kBattlePowerLevel,
                 decoration: InputDecoration(
-                  labelText: 'Battle Size',
+                  labelText: 'Your Army Power Level',
                 ),
-                items: BattleDataModel.battleSizes
-                    .map((size) =>
-                        DropdownMenuItem(value: size, child: Text('$size')))
+                initialValue: 50,
+                items: List<int>.generate(300, (i) => i)
+                    .map((i) => DropdownMenuItem(value: i, child: Text('$i')))
                     .toList()),
-// required this.battlePowerLevel,
-            SizedBox(
-              width: screenWidthPercentage(context, percentage: .3),
-              child: FormBuilderDropdown(
-                  name: kBattlePowerLevel,
+          ),
+          FormBuilderTextField(
+            name: kOpponentName,
+            validator: FormBuilderValidators.required(context),
+            decoration: InputDecoration(labelText: 'Opponent\'s Name'),
+          ),
+          FormBuilderDropdown(
+              name: kOpponentFaction,
+              validator: FormBuilderValidators.required(context),
+              decoration: InputDecoration(
+                labelText: 'Opponent\'s Faction',
+              ),
+              items: CrusadeDataModel.factions
+                  .map((faction) =>
+                      DropdownMenuItem(value: faction, child: Text('$faction')))
+                  .toList()),
+          Row(
+            children: [
+              SizedBox(
+                width: screenWidthPercentage(context, percentage: .3),
+                child: FormBuilderTextField(
+                  name: kScore,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.numeric(context)
+                  ]),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Score'),
+                ),
+              ),
+              HorizontalSpace.medium,
+              SizedBox(
+                width: screenWidthPercentage(context, percentage: .3),
+                child: FormBuilderTextField(
+                  name: kOpponentScore,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.numeric(context)
+                  ]),
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: 'Your Army Power Level',
-                  ),
-                  initialValue: 50,
-                  items: List<int>.generate(300, (i) => i)
-                      .map((i) => DropdownMenuItem(value: i, child: Text('$i')))
-                      .toList()),
-            ),
-// required this.opponentName,
-            FormBuilderTextField(
-              name: kOpponentName,
-              validator: FormBuilderValidators.required(context),
-              decoration: InputDecoration(labelText: 'Opponent\'s Name'),
-            ),
-// required this.opponentFaction,
-            FormBuilderDropdown(
-                name: kOpponentFaction,
-                validator: FormBuilderValidators.required(context),
-                decoration: InputDecoration(
-                  labelText: 'Opponent\'s Faction',
-                ),
-                items: CrusadeDataModel.factions
-                    .map((faction) => DropdownMenuItem(
-                        value: faction, child: Text('$faction')))
-                    .toList()),
-// required this.score,
-            Row(
-              children: [
-                SizedBox(
-                  width: screenWidthPercentage(context, percentage: .3),
-                  child: FormBuilderTextField(
-                    name: kScore,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
-                      FormBuilderValidators.numeric(context)
-                    ]),
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Score'),
+                    labelText: 'Opponent\'s Score',
                   ),
                 ),
-                HorizontalSpace.medium,
-                SizedBox(
-                  width: screenWidthPercentage(context, percentage: .3),
-                  child: FormBuilderTextField(
-                    name: kOpponentScore,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
-                      FormBuilderValidators.numeric(context)
-                    ]),
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Opponent\'s Score',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            FormBuilderTextField(
-              name: kMission,
-              decoration: InputDecoration(
-                labelText: 'Mission',
               ),
-              initialValue: '',
+            ],
+          ),
+          FormBuilderTextField(
+            name: kMission,
+            decoration: InputDecoration(
+              labelText: 'Mission',
             ),
-            FormBuilderTextField(
-              name: kNotes,
-              decoration: InputDecoration(
-                labelText: 'Notes',
-              ),
-              initialValue: '',
-              maxLines: 10,
+            initialValue: '',
+          ),
+          FormBuilderTextField(
+            name: kNotes,
+            decoration: InputDecoration(
+              labelText: 'Notes',
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: kcPrimaryColor),
-              child: Text('Select Army Roster'),
-              onPressed: () {
-                model.selectRoster();
-              },
-            ),
-          ],
-        ),
+            initialValue: '',
+            maxLines: 10,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: kcPrimaryColor),
+            child: Text('Select Army Roster'),
+            onPressed: () {
+              model.selectRoster();
+            },
+          ),
+        ],
       ),
     );
   }

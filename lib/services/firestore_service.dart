@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/app/locator.dart';
+import 'package:wh40k_crusader/data_models/battle_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
+import 'package:wh40k_crusader/data_models/crusade_unit_battle_performance_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
 import 'package:wh40k_crusader/services/firebase_auth_service.dart';
 
@@ -14,6 +16,8 @@ class FirestoreService {
       locator<FirebaseAuthenticationService>();
   static const String crusadeCollectionName = 'crusade';
   static const String rosterCollectionName = 'roster';
+  static const String battlesCollectionName = 'battles';
+  static const String unitPerformanceCollectionName = 'unitPerformance';
 
   final _crusadeCollectionRef =
       _db.collection(crusadeCollectionName).withConverter<CrusadeDataModel>(
@@ -53,15 +57,19 @@ class FirestoreService {
         .map((event) => event.docs.map((e) => e.data()).toList());
   }
 
-  Future<List<CrusadeDataModel>> getCrusadeDataOneTime() async {
-    List<CrusadeDataModel> crusades = [];
-
-    List<QueryDocumentSnapshot<CrusadeDataModel>> crusadesSnapshot =
-        await _crusadeCollectionRef.get().then((snapshot) => snapshot.docs);
-
-    crusadesSnapshot.forEach((element) => crusades.add(element.data()));
-
-    return crusades;
+  Stream<List<BattleDataModel>> listenToCrusadesBattles(
+      {required String crusadeUID}) {
+    logger.wtf('We are listening for battles for $crusadeUID');
+    return _crusadeCollectionRef
+        .doc(crusadeUID)
+        .collection(battlesCollectionName)
+        .withConverter<BattleDataModel>(
+          fromFirestore: (snapshot, _) =>
+              BattleDataModel.fromJson(snapshot.data()!, snapshot.id),
+          toFirestore: (battle, _) => battle.toJson(),
+        )
+        .snapshots()
+        .map((query) => query.docs.map((document) => document.data()).toList());
   }
 
   Future createNewCrusade(CrusadeDataModel crusade) async {
@@ -73,7 +81,7 @@ class FirestoreService {
   Future deleteCrusade(CrusadeDataModel crusade) async {
     logger.w('Firestore: Deleting Crusade');
     await deleteRoster(crusade);
-
+    await _deleteAllBattles(crusade);
     await _crusadeCollectionRef
         .doc(crusade.documentUID)
         .delete()
@@ -89,17 +97,6 @@ class FirestoreService {
         .update(crusade.toJson())
         .then((value) => logger.i("Crusade Updated"))
         .catchError((error) => logger.e("Failed to update crusade: $error"));
-  }
-
-  Future<CrusadeDataModel?> getCrusadeByUID(String documentUID) async {
-    logger.i('Getting Crusade: $documentUID');
-
-    DocumentSnapshot<CrusadeDataModel> snapshot =
-        await _crusadeCollectionRef.doc(documentUID).get();
-
-    CrusadeDataModel? crusade = snapshot.data();
-
-    return crusade;
   }
 
   Future addUnitToCrusadeRoster(
@@ -154,7 +151,7 @@ class FirestoreService {
 
   Future<void> deleteRoster(CrusadeDataModel crusade) async {
     logger.i('Deleting Crusade : ${crusade.name} roster');
-    var rosterRef = _crusadeCollectionRef
+    CollectionReference<CrusadeUnitDataModel> rosterRef = _crusadeCollectionRef
         .doc(crusade.documentUID)
         .collection(rosterCollectionName)
         .withConverter<CrusadeUnitDataModel>(
@@ -175,6 +172,115 @@ class FirestoreService {
         .update({kSupplyUsed: 0});
   }
 
+  Future<void> deleteRemoveUnitFromRoster(
+      {required CrusadeDataModel crusade,
+      required CrusadeUnitDataModel unitToDelete}) async {
+    await updateCrusade(crusade.copyWith(
+        supplyUsed: crusade.supplyUsed - unitToDelete.powerRating));
+
+    await _removeUnitFromRosterWithOutCrusadeUpdate(
+      crusadeUID: crusade.documentUID!,
+      unitToRemove: unitToDelete,
+    );
+  }
+
+  Future recordBattle({
+    required CrusadeDataModel crusade,
+    required BattleDataModel battle,
+    required List<CrusadeUnitBattlePerformanceDataModel> unitPerformanceList,
+  }) async {
+    // Update Crusade battle and victory counts
+
+    CollectionReference<BattleDataModel> battleCollectionRef =
+        _crusadeCollectionRef
+            .doc(crusade.documentUID)
+            .collection(battlesCollectionName)
+            .withConverter<BattleDataModel>(
+              fromFirestore: (snapshot, _) =>
+                  BattleDataModel.fromJson(snapshot.data()!, snapshot.id),
+              toFirestore: (battle, _) => battle.toJson(),
+            );
+
+    CrusadeDataModel updatedCrusade = crusade.copyWith(
+      battleTally: crusade.battleTally + 1,
+      victories: battle.score > battle.opponentScore
+          ? crusade.victories + 1
+          : crusade.victories,
+    );
+    await updateCrusade(updatedCrusade);
+    DocumentReference<BattleDataModel> docRef =
+        await battleCollectionRef.add(battle);
+
+    unitPerformanceList.forEach((unitPerformance) async {
+      await battleCollectionRef
+          .doc(docRef.id)
+          .collection(unitPerformanceCollectionName)
+          .withConverter<CrusadeUnitBattlePerformanceDataModel>(
+            fromFirestore: (snapshot, _) =>
+                CrusadeUnitBattlePerformanceDataModel.fromJson(
+                    snapshot.data()!, snapshot.id),
+            toFirestore: (unitPerformance, _) => unitPerformance.toJson(),
+          )
+          .doc(unitPerformance.unit!.documentUID)
+          .set(unitPerformance);
+    });
+  }
+
+  Future<void> _deleteAllBattles(CrusadeDataModel crusade) async {
+    CollectionReference<BattleDataModel> battlesRef = _crusadeCollectionRef
+        .doc(crusade.documentUID)
+        .collection(battlesCollectionName)
+        .withConverter<BattleDataModel>(
+          fromFirestore: (snapshot, _) =>
+              BattleDataModel.fromJson(snapshot.data()!, snapshot.id),
+          toFirestore: (battle, _) => battle.toJson(),
+        );
+
+    List<QueryDocumentSnapshot<BattleDataModel>> battlesSnapshot =
+        await battlesRef.get().then((snapshot) => snapshot.docs);
+
+    battlesSnapshot.forEach((element) async {
+      QuerySnapshot<CrusadeUnitBattlePerformanceDataModel>
+          battleUnitPerformanceList = await battlesRef
+              .doc(element.id)
+              .collection(unitPerformanceCollectionName)
+              .withConverter<CrusadeUnitBattlePerformanceDataModel>(
+                fromFirestore: (snapshot, _) =>
+                    CrusadeUnitBattlePerformanceDataModel.fromJson(
+                        snapshot.data()!, snapshot.id),
+                toFirestore: (unitPerformance, _) => unitPerformance.toJson(),
+              )
+              .get();
+
+      // Delete Each Unit Performance Document without updating the unit cards.
+      battleUnitPerformanceList.docs.forEach((element) async {
+        await battlesRef
+            .doc(element.id)
+            .collection(unitPerformanceCollectionName)
+            .doc(element.id)
+            .delete();
+      });
+      // Delete the Battle Record Document
+      _deleteBattleWithoutCrusadeOrUnitUpdates(
+          crusadeUID: crusade.documentUID!, battleToDelete: element.data());
+    });
+  }
+
+  Future<void> _deleteBattleWithoutCrusadeOrUnitUpdates(
+      {required String crusadeUID,
+      required BattleDataModel battleToDelete}) async {
+    CollectionReference<BattleDataModel> battlesRef = _crusadeCollectionRef
+        .doc(crusadeUID)
+        .collection(battlesCollectionName)
+        .withConverter<BattleDataModel>(
+          fromFirestore: (snapshot, _) =>
+              BattleDataModel.fromJson(snapshot.data()!, snapshot.id),
+          toFirestore: (battle, _) => battle.toJson(),
+        );
+
+    await battlesRef.doc(battleToDelete.documentUID).delete();
+  }
+
   Future<void> _removeUnitFromRosterWithOutCrusadeUpdate(
       {required String crusadeUID,
       required CrusadeUnitDataModel unitToRemove}) async {
@@ -193,17 +299,5 @@ class FirestoreService {
         .then((value) => logger.w(
             'Firestore: Unit ${unitToRemove.documentUID} removed from roster'))
         .catchError((error) => logger.e(error));
-  }
-
-  Future<void> deleteRemoveUnitFromRoster(
-      {required CrusadeDataModel crusade,
-      required CrusadeUnitDataModel unitToDelete}) async {
-    await updateCrusade(crusade.copyWith(
-        supplyUsed: crusade.supplyUsed - unitToDelete.powerRating));
-
-    await _removeUnitFromRosterWithOutCrusadeUpdate(
-      crusadeUID: crusade.documentUID!,
-      unitToRemove: unitToDelete,
-    );
   }
 }

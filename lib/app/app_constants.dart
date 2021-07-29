@@ -48,8 +48,17 @@ const String kOpponentFaction = 'opponentFaction';
 const String kScore = 'score';
 const String kOpponentScore = 'opponentScore';
 const String kNotes = 'notes';
+const String kCrusadeDocumentUID = 'crusadeDocumentUID';
+
+// Unit Battle Performance
+
+const String kUnitsDestroyed = 'unitsDestroyed';
+const String kBonusXP = 'bonusXP';
+const String kWasDestroyed = 'wasDestroyed';
+const String kMarkedForGreatness = 'markedForGreatness';
 
 //
 
 const String kCrusadeStream = 'crusade-stream';
 const String kRosterStream = 'roster-stream';
+const String kBattleStream = 'battle-stream';

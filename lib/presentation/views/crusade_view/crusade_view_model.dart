@@ -5,6 +5,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/app/locator.dart';
+import 'package:wh40k_crusader/data_models/battle_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
 import 'package:wh40k_crusader/routing/routes.dart';
@@ -34,6 +35,19 @@ class CrusadeViewModel extends MultipleStreamViewModel {
         kRosterStream: StreamData<List<CrusadeUnitDataModel>>(
             _db.listenToCrusadeRoster(crusadeUID: crusade.documentUID!),
             transformData: CrusadeRosterService.orderRoster),
+        kBattleStream: StreamData<List<BattleDataModel>>(
+          _db.listenToCrusadesBattles(crusadeUID: crusade.documentUID!),
+          onSubscribed: () {
+            logger.wtf('Sub to battles');
+          },
+          onError: (error) {
+            logger.wtf('Error on battles: $error');
+          },
+          onData: (data) {
+            logger.wtf('WE HAVE DATA?!?!?!');
+            return data;
+          },
+        ),
       };
 
   setState(CrusadeViewModelState state) {
