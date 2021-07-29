@@ -59,8 +59,13 @@ class BattleRecordCard extends ViewModelWidget<CrusadeViewModel> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                onPressed: () {},
-                child: Text('View Unit Performance'),
+                onPressed: () {
+                  model.showDeleteBattleConfirmationDialog(battle);
+                },
+                child: Icon(Icons.delete),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                ),
               ),
               HorizontalSpace.large,
             ],

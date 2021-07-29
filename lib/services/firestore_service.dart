@@ -184,6 +184,34 @@ class FirestoreService {
     );
   }
 
+  Future<void> deleteBattle({
+    required CrusadeDataModel crusade,
+    required BattleDataModel battle,
+  }) async {
+    // Update crusade Win / Loss based on the deleted battle.
+
+    if (battle.score > battle.opponentScore) {
+      // Victory
+      await updateCrusade(
+        crusade.copyWith(
+          victories: crusade.victories - 1,
+          battleTally: crusade.battleTally - 1,
+        ),
+      );
+    } else {
+      // Loss or defeat
+      await updateCrusade(
+        crusade.copyWith(
+          battleTally: crusade.battleTally - 1,
+        ),
+      );
+    }
+    // delete all unit performances from battle
+    // delete battle
+    await _deleteBattleWithoutCrusadeOrUnitUpdates(
+        crusadeUID: crusade.documentUID!, battleToDelete: battle);
+  }
+
   Future recordBattle({
     required CrusadeDataModel crusade,
     required BattleDataModel battle,

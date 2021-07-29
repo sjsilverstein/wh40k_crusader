@@ -111,6 +111,25 @@ class CrusadeViewModel extends MultipleStreamViewModel {
     }
   }
 
+  showDeleteBattleConfirmationDialog(BattleDataModel battle) async {
+    DialogResponse? response = await _dialogService.showConfirmationDialog(
+      title: 'Delete Battle',
+      description:
+          'Deleting a battle may cause unit cards to fall out of sync. '
+          'Do so at your own risk. '
+          'Are you sure you would still like to delete this battle?',
+      confirmationTitle: 'Cancel',
+      cancelTitle: 'Delete',
+    );
+
+    logger.i('Dialog Response ${response?.confirmed}');
+
+    if (!response!.confirmed) {
+      // Delete the specific battle and all unit performances
+      await _db.deleteBattle(crusade: crusade, battle: battle);
+    }
+  }
+
   showDropRosterDialog() async {
     DialogResponse? response = await _dialogService.showConfirmationDialog(
       title: 'Drop Roster',
@@ -141,6 +160,10 @@ class CrusadeViewModel extends MultipleStreamViewModel {
           editCrusadeValuesFormKey.currentState!.fields[kSupplyLimit]!.value),
       supplyUsed: int.parse(
           editCrusadeValuesFormKey.currentState!.fields[kSupplyUsed]!.value),
+      victories: int.parse(
+          editCrusadeValuesFormKey.currentState!.fields[kVictories]!.value),
+      battleTally: int.parse(
+          editCrusadeValuesFormKey.currentState!.fields[kBattleTally]!.value),
     );
 
     await _db.updateCrusade(updatedData);

@@ -56,8 +56,8 @@ class CrusadeView extends StatelessWidget {
             ElevatedButton(
               child: Icon(Icons.delete),
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.red)),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+              ),
               onPressed: () async {
                 await model.showConfirmDeleteDialog();
               },
@@ -71,32 +71,47 @@ class CrusadeView extends StatelessWidget {
               child: Column(
                 children: [
                   model.dataMap?[kCrusadeStream] != null
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ? Column(
                           children: [
-                            Text(
-                              'Requisition: ${model.dataMap?[kCrusadeStream].requisition}',
-                              style: TextStyle(
-                                  color: model.dataMap?[kCrusadeStream]
-                                              .requisition >
-                                          5
-                                      ? Colors.red
-                                      : Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.color),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Requisition: ${model.dataMap?[kCrusadeStream].requisition}',
+                                  style: TextStyle(
+                                      color: model.dataMap?[kCrusadeStream]
+                                                  .requisition >
+                                              5
+                                          ? Colors.red
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.color),
+                                ),
+                                Text(
+                                    'Supply Limit: ${model.dataMap?[kCrusadeStream].supplyLimit}'),
+                                Text(
+                                  'Supply Used: ${model.dataMap?[kCrusadeStream].supplyUsed}',
+                                  style: TextStyle(
+                                      color: model.dataMap?[kCrusadeStream]
+                                                  .supplyUsed >
+                                              model.dataMap?[kCrusadeStream]
+                                                  .supplyLimit
+                                          ? Colors.red
+                                          : Colors.green),
+                                ),
+                              ],
                             ),
-                            Text(
-                                'Supply Limit: ${model.dataMap?[kCrusadeStream].supplyLimit}'),
-                            Text(
-                              'Supply Used: ${model.dataMap?[kCrusadeStream].supplyUsed}',
-                              style: TextStyle(
-                                  color: model.dataMap?[kCrusadeStream]
-                                              .supplyUsed >
-                                          model.dataMap?[kCrusadeStream]
-                                              .supplyLimit
-                                      ? Colors.red
-                                      : Colors.green),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Victories: ${model.dataMap?[kCrusadeStream].victories}',
+                                ),
+                                HorizontalSpace.large,
+                                Text(
+                                    'Battle Tally: ${model.dataMap?[kCrusadeStream].battleTally}'),
+                              ],
                             ),
                           ],
                         )

@@ -15,6 +15,8 @@ class EditCrusadeForm extends ViewModelWidget<CrusadeViewModel> {
           kRequisition: model.crusade.requisition.toString(),
           kSupplyLimit: model.crusade.supplyLimit.toString(),
           kSupplyUsed: model.crusade.supplyUsed.toString(),
+          kVictories: model.crusade.victories.toString(),
+          kBattleTally: model.crusade.battleTally.toString(),
         },
         child: Column(
           children: [
@@ -27,7 +29,12 @@ class EditCrusadeForm extends ViewModelWidget<CrusadeViewModel> {
                   width: screenWidthPercentage(context, percentage: .3),
                   child: FormBuilderTextField(
                     name: kRequisition,
-                    validator: FormBuilderValidators.required(context),
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.numeric(context),
+                      ],
+                    ),
                     decoration: InputDecoration(labelText: 'Requisition'),
                   ),
                 ),
@@ -35,7 +42,12 @@ class EditCrusadeForm extends ViewModelWidget<CrusadeViewModel> {
                   width: screenWidthPercentage(context, percentage: .3),
                   child: FormBuilderTextField(
                     name: kSupplyLimit,
-                    validator: FormBuilderValidators.required(context),
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.numeric(context),
+                      ],
+                    ),
                     decoration: InputDecoration(labelText: 'Supply Limit'),
                   ),
                 ),
@@ -43,8 +55,44 @@ class EditCrusadeForm extends ViewModelWidget<CrusadeViewModel> {
                   width: screenWidthPercentage(context, percentage: .3),
                   child: FormBuilderTextField(
                     name: kSupplyUsed,
-                    validator: FormBuilderValidators.required(context),
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.numeric(context),
+                      ],
+                    ),
                     decoration: InputDecoration(labelText: 'Supply Used'),
+                  ),
+                ),
+              ],
+            ),
+            VerticalSpace.small,
+            Row(
+              children: [
+                SizedBox(
+                  width: screenWidthPercentage(context, percentage: .3),
+                  child: FormBuilderTextField(
+                    name: kVictories,
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.numeric(context),
+                      ],
+                    ),
+                    decoration: InputDecoration(labelText: 'Victories'),
+                  ),
+                ),
+                SizedBox(
+                  width: screenWidthPercentage(context, percentage: .3),
+                  child: FormBuilderTextField(
+                    name: kBattleTally,
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.numeric(context),
+                      ],
+                    ),
+                    decoration: InputDecoration(labelText: 'Battle Tally'),
                   ),
                 ),
               ],
