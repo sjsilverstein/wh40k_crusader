@@ -142,8 +142,8 @@ class AddBattleViewModel extends MultipleStreamViewModel {
       battleRosterUpdatedUnitData.add(element.unit!.copyWith(
         battlesPlayed: element.unit!.battlesPlayed + 1,
         battlesSurvived: element.wasDestroyed
-            ? element.unit!.battlesSurvived + 1
-            : element.unit!.battlesSurvived,
+            ? element.unit!.battlesSurvived
+            : element.unit!.battlesSurvived + 1,
         experience: element.markedForGreatness
             ? element.unit!.experience +
                 4 +

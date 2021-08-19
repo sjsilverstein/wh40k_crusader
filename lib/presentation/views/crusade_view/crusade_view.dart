@@ -102,6 +102,7 @@ class CrusadeView extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            VerticalSpace.medium,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [

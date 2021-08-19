@@ -37,4 +37,18 @@ class CrusadeUnitBattlePerformanceDataModel {
       kMarkedForGreatness: markedForGreatness,
     };
   }
+
+  CrusadeUnitBattlePerformanceDataModel copyWith({
+    int? unitsDestroyed,
+    int? bonusXP,
+    bool? wasDestroyed,
+    bool? markedForGreatness,
+  }) =>
+      CrusadeUnitBattlePerformanceDataModel(
+        unitsDestroyed: unitsDestroyed ?? this.unitsDestroyed,
+        bonusXP: bonusXP ?? this.bonusXP,
+        wasDestroyed: wasDestroyed ?? this.wasDestroyed,
+        markedForGreatness: markedForGreatness ?? this.markedForGreatness,
+        documentUID: this.documentUID,
+      );
 }

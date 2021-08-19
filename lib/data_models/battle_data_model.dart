@@ -82,4 +82,32 @@ class BattleDataModel {
       kUpdatedAt: FieldValue.serverTimestamp(),
     };
   }
+
+  bool isVictory() {
+    return this.score > this.opponentScore ? true : false;
+  }
+
+  BattleDataModel copyWith({
+    String? battleSize,
+    int? battlePowerLevel,
+    String? opponentName,
+    String? opponentFaction,
+    int? score,
+    int? opponentScore,
+    String? mission,
+    String? notes,
+  }) =>
+      BattleDataModel(
+        battleDate: this.battleDate,
+        battleSize: battleSize ?? this.battleSize,
+        battlePowerLevel: battlePowerLevel ?? this.battlePowerLevel,
+        opponentName: opponentName ?? this.opponentName,
+        opponentFaction: opponentFaction ?? this.opponentFaction,
+        score: score ?? this.score,
+        opponentScore: opponentScore ?? this.opponentScore,
+        mission: mission ?? this.mission,
+        notes: notes ?? this.notes,
+        documentUID: this.documentUID,
+        createdAt: this.createdAt,
+      );
 }

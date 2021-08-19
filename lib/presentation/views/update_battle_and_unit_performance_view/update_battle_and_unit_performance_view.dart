@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/data_models/battle_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_battle_performance_data_model.dart';
@@ -20,7 +21,7 @@ class UpdateBattleAndUnitPerformanceView extends StatelessWidget {
     required this.roster,
   });
 
-  _buildBattleDetailsForm(
+  Widget _buildBattleDetailsForm(
       BuildContext context, UpdateBattleAndUnitPerformanceViewModel model) {
     String battleResult;
     Color color;
@@ -37,43 +38,117 @@ class UpdateBattleAndUnitPerformanceView extends StatelessWidget {
     }
 
     return Card(
-      child: ExpansionTile(
-        leading: FactionIcon(battle.opponentFaction),
-        title: Text(
-            '${model.battle.opponentName} - ${model.battle.opponentFaction}'),
-        subtitle: Text(
-          battleResult,
-          style: TextStyle(color: color),
-        ),
+      child: Column(
         children: [
-          Text('Opp Name ${battle.opponentName} '),
-          Text('Opp Faction ${battle.opponentFaction} '),
-          Text('Battle Size ${battle.battleSize} '),
-          Text('Power Level: ${battle.battlePowerLevel}'),
-          Text('Score ${battle.score}'),
-          Text('Opp Score: ${battle.opponentScore}'),
-          Text('Mission: ${battle.mission}'),
-          Text('Notes: ${battle.notes}'),
+          ListTile(
+            leading: FactionIcon(battle.opponentFaction),
+            title: Text(
+                '${model.battle.opponentName} - ${model.battle.opponentFaction}'),
+            subtitle: Text(
+              battleResult,
+              style: TextStyle(color: color),
+            ),
+          ),
+          FormBuilderTextField(
+            name: kOpponentName,
+            initialValue: battle.opponentName,
+            decoration: InputDecoration(labelText: 'Opp Name'),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
+            ]),
+          ),
+          FormBuilderDropdown(
+              name: kOpponentFaction,
+              validator: FormBuilderValidators.required(context),
+              initialValue: battle.opponentFaction,
+              decoration: InputDecoration(
+                labelText: 'Opponent\'s Faction',
+              ),
+              items: CrusadeDataModel.factions
+                  .map((faction) =>
+                      DropdownMenuItem(value: faction, child: Text('$faction')))
+                  .toList()),
+          FormBuilderDropdown(
+            name: kBattleSize,
+            validator: FormBuilderValidators.required(context),
+            initialValue: battle.battleSize,
+            decoration: InputDecoration(
+              labelText: 'Battle Size',
+            ),
+            items: BattleDataModel.battleSizes
+                .map((size) =>
+                    DropdownMenuItem(value: size, child: Text('$size')))
+                .toList(),
+          ),
+          FormBuilderDropdown(
+            name: kBattlePowerLevel,
+            decoration: InputDecoration(
+              labelText: 'Your Army Power Level',
+            ),
+            initialValue: battle.battlePowerLevel,
+            items: List<int>.generate(300, (i) => i)
+                .map((i) => DropdownMenuItem(value: i, child: Text('$i')))
+                .toList(),
+          ),
+          FormBuilderTextField(
+            name: kScore,
+            initialValue: battle.score.toString(),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
+              FormBuilderValidators.numeric(context)
+            ]),
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: 'Score'),
+          ),
+          FormBuilderTextField(
+            name: kOpponentScore,
+            initialValue: battle.opponentScore.toString(),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
+              FormBuilderValidators.numeric(context)
+            ]),
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: 'Opp Score'),
+          ),
+          FormBuilderTextField(
+            name: kMission,
+            decoration: InputDecoration(
+              labelText: 'Mission',
+            ),
+            initialValue: battle.mission,
+          ),
+          FormBuilderTextField(
+            name: kNotes,
+            decoration: InputDecoration(
+              labelText: 'Notes',
+            ),
+            initialValue: battle.notes,
+            maxLines: 10,
+          ),
         ],
       ),
     );
   }
 
-  _buildUnitPerformanceCards(
+  Widget _buildUnitPerformanceCards(
       BuildContext context, UpdateBattleAndUnitPerformanceViewModel model) {
     return Column(
-      children: model.unitPerformanceList.map((e) {
-        if (model.currentRoster.indexWhere(
-                (element) => element.documentUID == e.documentUID) ==
-            -1) {
-          return _UnitNolongerExistCard(e);
-        }
-        return _CurrentUnitPerformanceFormCard(
-          model.currentRoster
-              .firstWhere((element) => element.documentUID == e.documentUID),
-          e,
-        );
-      }).toList(),
+      children: model.unitPerformanceList != null
+          ? model.unitPerformanceList!.map((e) {
+              if (model.currentRoster.indexWhere(
+                      (element) => element.documentUID == e.documentUID) ==
+                  -1) {
+                return _UnitNoLongerExistCard(e);
+              }
+              return _CurrentUnitPerformanceFormCard(
+                model.currentRoster.firstWhere(
+                    (element) => element.documentUID == e.documentUID),
+                e,
+              );
+            }).toList()
+          : [
+              Text('No Battle Performance Data'),
+            ],
     );
   }
 
@@ -89,22 +164,47 @@ class UpdateBattleAndUnitPerformanceView extends StatelessWidget {
         ),
         body: FormBuilder(
           key: model.formKey,
-          child: Column(
+          child: Row(
             children: [
-              _buildBattleDetailsForm(context, model),
-              _buildUnitPerformanceCards(context, model),
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildBattleDetailsForm(context, model),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      _buildUnitPerformanceCards(context, model),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.save),
+          onPressed: () async {
+            await model.validateAndSubmit();
+          },
         ),
       ),
     );
   }
 }
 
-class _UnitNolongerExistCard extends StatelessWidget {
+class _UnitNoLongerExistCard extends StatelessWidget {
   final CrusadeUnitBattlePerformanceDataModel performance;
 
-  _UnitNolongerExistCard(this.performance);
+  _UnitNoLongerExistCard(this.performance);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -142,10 +242,59 @@ class _CurrentUnitPerformanceFormCard
         title: Text('${unit.unitName}'),
         subtitle: Text(unit.unitType),
         children: [
-          Text('United Destroyed: ${performance.unitsDestroyed}'),
-          Text('Bonus XP: ${performance.bonusXP}'),
-          Text('Was Destroyed: ${performance.wasDestroyed}'),
-          Text('Marked For Greatness: ${performance.markedForGreatness}'),
+          FormBuilderTextField(
+            name: '${performance.documentUID}$kUnitsDestroyed',
+            decoration: InputDecoration(labelText: 'Units Destroyed'),
+            initialValue: performance.unitsDestroyed.toString(),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.numeric(context),
+              FormBuilderValidators.required(context),
+            ]),
+          ),
+          FormBuilderTextField(
+            name: '${performance.documentUID}$kBonusXP',
+            decoration: InputDecoration(labelText: 'Bonus XP'),
+            initialValue: performance.bonusXP.toString(),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.numeric(context),
+              FormBuilderValidators.required(context),
+            ]),
+          ),
+          FormBuilderCheckbox(
+            name: '${performance.documentUID}$kWasDestroyed',
+            title: Text('Was Destroyed'),
+            initialValue: performance.wasDestroyed,
+            tristate: false,
+            controlAffinity: ListTileControlAffinity.trailing,
+            onChanged: (value) {},
+          ),
+          model.unitIsMarkedForGreatness == true
+              ? performance.documentUID == model.unitUIDIsMarkedForGreatness
+                  ? FormBuilderCheckbox(
+                      name: '${performance.documentUID}$kMarkedForGreatness',
+                      title: Text('Marked For Greatness'),
+                      initialValue: performance.markedForGreatness,
+                      tristate: false,
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      onChanged: (value) {
+                        model.changeMarkedForGreatness(
+                            value!, performance.documentUID!);
+                      },
+                    )
+                  : Container(
+                      child: Text('Another Unit is MarkedForGreatness'),
+                    )
+              : FormBuilderCheckbox(
+                  name: '${performance.documentUID}$kMarkedForGreatness',
+                  title: Text('Marked For Greatness'),
+                  initialValue: performance.markedForGreatness,
+                  tristate: false,
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  onChanged: (value) {
+                    model.changeMarkedForGreatness(
+                        value!, performance.documentUID!);
+                  },
+                ),
         ],
       ),
     );
