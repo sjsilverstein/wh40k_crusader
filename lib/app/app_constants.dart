@@ -34,6 +34,8 @@ const String kWarlordTraits = 'warlordTraits';
 const String kRelics = 'relics';
 const String kBattlesPlayed = 'battlesPlayed';
 const String kBattlesSurvived = 'battlesSurvived';
+const String kTitle = 'title';
+const String kDescription = 'description';
 const String kBattleHonors = 'battlesHonors';
 const String kBattleScars = 'battleScars';
 

@@ -6,6 +6,12 @@ class BattleHonor {
   String? description;
 
   BattleHonor({required this.title, this.description});
+
+  BattleHonor.fromJson(Map<String, dynamic> data)
+      : this(
+          title: data[kTitle] as String,
+          description: data[kDescription] ?? 'No Description Provided',
+        );
 }
 
 class BattleScar {
@@ -13,6 +19,12 @@ class BattleScar {
   String? description;
 
   BattleScar({required this.title, this.description});
+
+  BattleScar.fromJson(Map<String, dynamic> data)
+      : this(
+          title: data[kTitle]! as String,
+          description: data[kDescription] ?? 'No Description Provided',
+        );
 }
 
 class CrusadeUnitDataModel {
@@ -46,8 +58,8 @@ class CrusadeUnitDataModel {
   int battlesPlayed;
   int battlesSurvived;
 
-  List<BattleHonor>? battleHonors;
-  List<BattleScar>? battleScars;
+  List<BattleHonor> battleHonors = [];
+  List<BattleScar> battleScars = [];
 
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -68,8 +80,8 @@ class CrusadeUnitDataModel {
     this.relics,
     this.battlesPlayed = 0,
     this.battlesSurvived = 0,
-    this.battleHonors,
-    this.battleScars,
+    required this.battleHonors,
+    required this.battleScars,
     this.createdAt,
     this.updatedAt,
   });
@@ -87,6 +99,12 @@ class CrusadeUnitDataModel {
           crusadePoints: data[kCrusadePoints]! as int,
           battlesPlayed: data[kBattlesPlayed]! as int,
           battlesSurvived: data[kBattlesSurvived]! as int,
+          battleHonors: List.castFrom(data[kBattleHonors]! as List)
+              .map((e) => BattleHonor.fromJson(e))
+              .toList(),
+          battleScars: List.castFrom(data[kBattleScars]! as List)
+              .map((e) => BattleScar.fromJson(e))
+              .toList(),
           createdAt: DateTime.parse(
               (data[kCreatedAt]! as Timestamp).toDate().toString()),
           updatedAt: DateTime.parse(

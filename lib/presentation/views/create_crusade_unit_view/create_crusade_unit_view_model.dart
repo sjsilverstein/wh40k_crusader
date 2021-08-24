@@ -44,6 +44,8 @@ class CreateUnitViewModel extends BaseViewModel {
             formKey.currentState!.fields[formBattlePlayedField]!.value,
         battlesSurvived:
             formKey.currentState!.fields[formBattlesSurvivedField]!.value,
+        battleHonors: [],
+        battleScars: [],
         equipment: formKey.currentState!.fields[formEquipmentField]!.value,
       );
 

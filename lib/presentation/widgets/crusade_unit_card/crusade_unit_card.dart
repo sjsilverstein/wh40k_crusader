@@ -27,6 +27,30 @@ class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
     }
   }
 
+  _buildBattleHonors() {
+    List<Widget> widgetList = [];
+    unit.battleHonors.forEach((element) {
+      widgetList.add(
+          Text('Title: ${element.title} Description: ${element.description}'));
+    });
+    return ExpansionTile(
+      title: Text('Battle Honors'),
+      children: widgetList,
+    );
+  }
+
+  _buildBattleScars() {
+    List<Widget> widgetList = [];
+    unit.battleScars.forEach((element) {
+      widgetList.add(
+          Text('Title: ${element.title} Description: ${element.description}'));
+    });
+    return ExpansionTile(
+      title: Text('Battle Scars'),
+      children: widgetList,
+    );
+  }
+
   @override
   Widget build(BuildContext context, CrusadeViewModel model) {
     return Card(
@@ -81,6 +105,8 @@ class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
               Text('Battles Survived: ${unit.battlesSurvived.toString()}'),
             ],
           ),
+          unit.battleHonors.length > 0 ? _buildBattleHonors() : Container(),
+          unit.battleScars.length > 0 ? _buildBattleScars() : Container(),
           Row(
             children: [
               Text(unit.equipment),
