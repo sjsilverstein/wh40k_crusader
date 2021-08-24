@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
 
-class BattleHonour {
+class BattleHonor {
   String title;
   String? description;
 
-  BattleHonour({required this.title, this.description});
+  BattleHonor({required this.title, this.description});
 }
 
 class BattleScar {
@@ -46,7 +46,7 @@ class CrusadeUnitDataModel {
   int battlesPlayed;
   int battlesSurvived;
 
-  List<BattleHonour>? battleHonours;
+  List<BattleHonor>? battleHonors;
   List<BattleScar>? battleScars;
 
   DateTime? createdAt;
@@ -68,7 +68,7 @@ class CrusadeUnitDataModel {
     this.relics,
     this.battlesPlayed = 0,
     this.battlesSurvived = 0,
-    this.battleHonours,
+    this.battleHonors,
     this.battleScars,
     this.createdAt,
     this.updatedAt,
@@ -123,7 +123,7 @@ class CrusadeUnitDataModel {
       kRelics: relics,
       kBattlesPlayed: battlesPlayed,
       kBattlesSurvived: battlesSurvived,
-      kBattleHonors: battleHonours,
+      kBattleHonors: battleHonors,
       kBattleScars: battleScars,
       kCreatedAt: createdAt ?? FieldValue.serverTimestamp(),
       kUpdatedAt: FieldValue.serverTimestamp(),
@@ -143,7 +143,7 @@ class CrusadeUnitDataModel {
     List<String>? relics,
     int? battlesPlayed,
     int? battlesSurvived,
-    List<BattleHonour>? battleHonours,
+    List<BattleHonor>? battleHonours,
     List<BattleScar>? battleScars,
   }) =>
       CrusadeUnitDataModel(
@@ -162,7 +162,7 @@ class CrusadeUnitDataModel {
         relics: relics ?? this.relics,
         battlesPlayed: battlesPlayed ?? this.battlesPlayed,
         battlesSurvived: battlesSurvived ?? this.battlesSurvived,
-        battleHonours: battleHonours ?? this.battleHonours,
+        battleHonors: battleHonours ?? this.battleHonors,
         battleScars: battleScars ?? this.battleScars,
         createdAt: this.createdAt,
       );
