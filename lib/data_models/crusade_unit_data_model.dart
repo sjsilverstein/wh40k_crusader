@@ -38,6 +38,13 @@ class Power {
           title: data[kTitle]! as String,
           description: data[kDescription] ?? 'No Description Provided',
         );
+
+  Map<String, dynamic> toJson() {
+    return {
+      kTitle: this.title,
+      kDescription: this.description ?? null,
+    };
+  }
 }
 
 class WarlordTrait {
@@ -94,12 +101,12 @@ class CrusadeUnitDataModel {
   int battlesPlayed;
   int battlesSurvived;
 
-  List<Power>? psychicPowers = [];
-  List<WarlordTrait>? warlordTraits = [];
-  List<Relic>? relics = [];
+  List<Power> psychicPowers;
+  List<WarlordTrait> warlordTraits;
+  List<Relic> relics;
 
-  List<BattleHonor> battleHonors = [];
-  List<BattleScar> battleScars = [];
+  List<BattleHonor> battleHonors;
+  List<BattleScar> battleScars;
 
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -185,7 +192,7 @@ class CrusadeUnitDataModel {
       kCrusadePoints: crusadePoints,
       kExperience: experience,
       kEquipment: equipment,
-      kPowers: psychicPowers,
+      kPowers: psychicPowers.map((e) => e.toJson()).toList(),
       kWarlordTraits: warlordTraits,
       kRelics: relics,
       kBattlesPlayed: battlesPlayed,

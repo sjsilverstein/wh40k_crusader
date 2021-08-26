@@ -39,6 +39,18 @@ class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
     );
   }
 
+  _buildPowers() {
+    List<Widget> widgetList = [];
+    unit.psychicPowers.forEach((element) {
+      widgetList.add(
+          Text('Title: ${element.title} Description: ${element.description}'));
+    });
+    return ExpansionTile(
+      title: Text('Powers'),
+      children: widgetList,
+    );
+  }
+
   _buildBattleScars() {
     List<Widget> widgetList = [];
     unit.battleScars.forEach((element) {
@@ -105,6 +117,7 @@ class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
               Text('Battles Survived: ${unit.battlesSurvived.toString()}'),
             ],
           ),
+          unit.psychicPowers.length > 0 ? _buildPowers() : Container(),
           unit.battleHonors.length > 0 ? _buildBattleHonors() : Container(),
           unit.battleScars.length > 0 ? _buildBattleScars() : Container(),
           Row(
