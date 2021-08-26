@@ -24,6 +24,11 @@ class CreateUnitViewModel extends BaseViewModel {
   final String formBattlesSurvivedField = kBattlesSurvived;
   final String formEquipmentField = kEquipment;
 
+  List<Power> _unitPowers = [
+    Power(title: 'Mawh', description: 'Ultimate Cosmic'),
+  ];
+  List<Power> get unitPowers => List.unmodifiable(_unitPowers);
+
   String get name => formKey.currentState!.fields[formNameField]!.value;
 
   CrusadeDataModel _crusade;
@@ -46,6 +51,9 @@ class CreateUnitViewModel extends BaseViewModel {
             formKey.currentState!.fields[formBattlesSurvivedField]!.value,
         battleHonors: [],
         battleScars: [],
+        psychicPowers: _unitPowers,
+        warlordTraits: [],
+        relics: [],
         equipment: formKey.currentState!.fields[formEquipmentField]!.value,
       );
 
@@ -55,6 +63,11 @@ class CreateUnitViewModel extends BaseViewModel {
       // Update the generic unit to a form which adds the unit to the crusade.
       pop();
     }
+  }
+
+  unitPowersRemoveIndex(int index) {
+    _unitPowers.removeAt(index);
+    notifyListeners();
   }
 
   pop() {

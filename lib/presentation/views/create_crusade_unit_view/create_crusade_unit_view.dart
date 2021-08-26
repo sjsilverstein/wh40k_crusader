@@ -131,6 +131,50 @@ class CreateUnitView extends StatelessWidget {
                             decoration: InputDecoration(labelText: 'Equipment'),
                             initialValue: 'Default Equipment',
                           ),
+                          ListTile(
+                            title: Text('Powers'),
+                            trailing: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kcPrimaryColor),
+                              child: Icon(Icons.add),
+                              onPressed: () {},
+                            ),
+                            subtitle: Column(
+                              children: [
+                                ListView.builder(
+                                  itemCount: model.unitPowers.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      subtitle: Text(
+                                          'Title: ${model.unitPowers[index].title} Description: ${model.unitPowers[index].description}'),
+                                      trailing: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: kcWarningColor),
+                                        child: Icon(Icons.remove),
+                                        onPressed: () {
+                                          model.unitPowersRemoveIndex(index);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            title: Text('Warlord'),
+                          ),
+                          ListTile(
+                            title: Text('Relic'),
+                          ),
+                          ListTile(
+                            title: Text('Honor'),
+                          ),
+                          ListTile(
+                            title: Text('Scar'),
+                          ),
                         ],
                       ),
                     ),

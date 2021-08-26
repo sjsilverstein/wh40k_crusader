@@ -27,6 +27,45 @@ class BattleScar {
         );
 }
 
+class Power {
+  String title;
+  String? description;
+
+  Power({required this.title, this.description});
+
+  Power.fromJson(Map<String, dynamic> data)
+      : this(
+          title: data[kTitle]! as String,
+          description: data[kDescription] ?? 'No Description Provided',
+        );
+}
+
+class WarlordTrait {
+  String title;
+  String? description;
+
+  WarlordTrait({required this.title, this.description});
+
+  WarlordTrait.fromJson(Map<String, dynamic> data)
+      : this(
+          title: data[kTitle]! as String,
+          description: data[kDescription] ?? 'No Description Provided',
+        );
+}
+
+class Relic {
+  String title;
+  String? description;
+
+  Relic({required this.title, this.description});
+
+  Relic.fromJson(Map<String, dynamic> data)
+      : this(
+          title: data[kTitle]! as String,
+          description: data[kDescription] ?? 'No Description Provided',
+        );
+}
+
 class CrusadeUnitDataModel {
   static const List<String> battleFieldRoles = const [
     'HQ',
@@ -51,12 +90,13 @@ class CrusadeUnitDataModel {
 
   String unitType;
   String equipment;
-  List<String>? psychicPowers;
-  List<String>? warlordTraits;
-  List<String>? relics;
 
   int battlesPlayed;
   int battlesSurvived;
+
+  List<Power>? psychicPowers = [];
+  List<WarlordTrait>? warlordTraits = [];
+  List<Relic>? relics = [];
 
   List<BattleHonor> battleHonors = [];
   List<BattleScar> battleScars = [];
@@ -75,9 +115,9 @@ class CrusadeUnitDataModel {
     this.crusadePoints = 0,
     this.experience = 0,
     this.equipment = 'Default Equipment',
-    this.psychicPowers,
-    this.warlordTraits,
-    this.relics,
+    required this.psychicPowers,
+    required this.warlordTraits,
+    required this.relics,
     this.battlesPlayed = 0,
     this.battlesSurvived = 0,
     required this.battleHonors,
@@ -99,6 +139,15 @@ class CrusadeUnitDataModel {
           crusadePoints: data[kCrusadePoints]! as int,
           battlesPlayed: data[kBattlesPlayed]! as int,
           battlesSurvived: data[kBattlesSurvived]! as int,
+          psychicPowers: List.castFrom(data[kPowers]! as List)
+              .map((e) => Power.fromJson(e))
+              .toList(),
+          warlordTraits: List.castFrom(data[kWarlordTraits]! as List)
+              .map((e) => WarlordTrait.fromJson(e))
+              .toList(),
+          relics: List.castFrom(data[kRelics]! as List)
+              .map((e) => Relic.fromJson(e))
+              .toList(),
           battleHonors: List.castFrom(data[kBattleHonors]! as List)
               .map((e) => BattleHonor.fromJson(e))
               .toList(),
@@ -156,9 +205,9 @@ class CrusadeUnitDataModel {
     int? experience,
     String? battleFieldRole,
     String? equipment,
-    List<String>? psychicPowers,
-    List<String>? warlordTraits,
-    List<String>? relics,
+    List<Power>? psychicPowers,
+    List<WarlordTrait>? warlordTraits,
+    List<Relic>? relics,
     int? battlesPlayed,
     int? battlesSurvived,
     List<BattleHonor>? battleHonours,
