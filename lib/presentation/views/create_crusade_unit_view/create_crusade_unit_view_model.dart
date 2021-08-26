@@ -27,10 +27,20 @@ class CreateUnitViewModel extends BaseViewModel {
   final String formBattlesSurvivedField = kBattlesSurvived;
   final String formEquipmentField = kEquipment;
 
-  List<Power> _unitPowers = [
-    Power(title: 'Mawh', description: 'Ultimate Cosmic'),
-  ];
+  List<Power> _unitPowers = [];
   List<Power> get unitPowers => List.unmodifiable(_unitPowers);
+
+  List<WarlordTrait> _warlordTraits = [];
+  List<WarlordTrait> get warlordTraits => List.unmodifiable(_warlordTraits);
+
+  List<Relic> _relics = [];
+  List<Relic> get relics => List.unmodifiable(_relics);
+
+  List<BattleHonor> _battleHonors = [];
+  List<BattleHonor> get battleHonors => List.unmodifiable(_battleHonors);
+
+  List<BattleScar> _battleScars = [];
+  List<BattleScar> get battleScars => List.unmodifiable(_battleScars);
 
   String get name => formKey.currentState!.fields[formNameField]!.value;
 
@@ -52,11 +62,11 @@ class CreateUnitViewModel extends BaseViewModel {
             formKey.currentState!.fields[formBattlePlayedField]!.value,
         battlesSurvived:
             formKey.currentState!.fields[formBattlesSurvivedField]!.value,
-        battleHonors: [],
-        battleScars: [],
+        battleHonors: _battleHonors,
+        battleScars: _battleScars,
         psychicPowers: _unitPowers,
-        warlordTraits: [],
-        relics: [],
+        warlordTraits: _warlordTraits,
+        relics: _relics,
         equipment: formKey.currentState!.fields[formEquipmentField]!.value,
       );
 
@@ -70,6 +80,11 @@ class CreateUnitViewModel extends BaseViewModel {
 
   unitPowersRemoveIndex(int index) {
     _unitPowers.removeAt(index);
+    notifyListeners();
+  }
+
+  unitWarlordTraitsRemoveIndex(int index) {
+    _warlordTraits.removeAt(index);
     notifyListeners();
   }
 
@@ -100,6 +115,24 @@ class CreateUnitViewModel extends BaseViewModel {
       logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
       if (response.confirmed) {
         _unitPowers.add(Power.fromJson(response.data));
+      }
+    }
+    notifyListeners();
+  }
+
+  addWarlordTraitAttribute() async {
+    DialogResponse? response = await _dialogService.showCustomDialog(
+      variant: DialogType.AddCrusadeUnitAttribute,
+      title: 'New Warlord Trait',
+      description: 'Some Description',
+      mainButtonTitle: 'Add Warlord Trait',
+      secondaryButtonTitle: 'Cancel',
+    );
+
+    if (response != null) {
+      logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
+      if (response.confirmed) {
+        _warlordTraits.add(WarlordTrait.fromJson(response.data));
       }
     }
     notifyListeners();
