@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:wh40k_crusader/app/app_constants.dart';
 import 'package:wh40k_crusader/presentation/shared/ui_helpers.dart';
 
 class AddCrusadeUnitAttributeDialog extends StatefulWidget {
@@ -17,10 +19,7 @@ class AddCrusadeUnitAttributeDialog extends StatefulWidget {
 
 class _AddCrusadeUnitAttributeDialogState
     extends State<AddCrusadeUnitAttributeDialog> {
-  TextEditingController _attributeTitleController = TextEditingController();
-  TextEditingController _attributeDescriptionController =
-      TextEditingController();
-
+  final formKey = GlobalKey<FormBuilderState>();
   DialogResponse? response;
 
   @override
@@ -38,10 +37,25 @@ class _AddCrusadeUnitAttributeDialogState
         mainAxisSize: MainAxisSize.min,
         children: [
           VerticalSpace.small,
-          Text('Custom Form'),
           Text('${widget.request.title ?? 'No Title Provided'}'),
           VerticalSpace.small,
           Text('${widget.request.description ?? 'No Description Provided'}'),
+          FormBuilder(
+            key: formKey,
+            child: Column(
+              children: [
+                FormBuilderTextField(
+                  name: kTitle,
+                  decoration: InputDecoration(labelText: 'Title:'),
+                  validator: FormBuilderValidators.required(context),
+                ),
+                FormBuilderTextField(
+                  name: kDescription,
+                  decoration: InputDecoration(labelText: 'Description:'),
+                ),
+              ],
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -52,8 +66,16 @@ class _AddCrusadeUnitAttributeDialogState
                   child: Text(widget.request.secondaryButtonTitle!),
                 ),
               TextButton(
-                onPressed: () =>
-                    widget.completer(DialogResponse(confirmed: true)),
+                onPressed: () => widget.completer(
+                  DialogResponse(
+                    confirmed: true,
+                    data: {
+                      kTitle: formKey.currentState!.fields[kTitle]!.value,
+                      kDescription:
+                          formKey.currentState!.fields[kDescription]!.value
+                    },
+                  ),
+                ),
                 child: Text(
                     widget.request.mainButtonTitle ?? 'No Main Button Title'),
               )

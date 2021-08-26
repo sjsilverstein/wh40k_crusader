@@ -138,7 +138,7 @@ class CreateUnitView extends StatelessWidget {
                                   primary: kcPrimaryColor),
                               child: Icon(Icons.add),
                               onPressed: () async {
-                                await model.createBasicDialog();
+                                await model.addPowerAttribute();
                               },
                             ),
                             subtitle: Column(

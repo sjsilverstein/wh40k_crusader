@@ -87,6 +87,24 @@ class CreateUnitViewModel extends BaseViewModel {
     }
   }
 
+  addPowerAttribute() async {
+    DialogResponse? response = await _dialogService.showCustomDialog(
+      variant: DialogType.AddCrusadeUnitAttribute,
+      title: 'New Unit Power',
+      description: 'Some Description',
+      mainButtonTitle: 'Add Power',
+      secondaryButtonTitle: 'Cancel',
+    );
+
+    if (response != null) {
+      logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
+      if (response.confirmed) {
+        _unitPowers.add(Power.fromJson(response.data));
+      }
+    }
+    notifyListeners();
+  }
+
   pop() {
     _navigationService.back();
   }
