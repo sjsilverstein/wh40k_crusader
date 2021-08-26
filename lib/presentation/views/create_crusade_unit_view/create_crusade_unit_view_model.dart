@@ -3,7 +3,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:wh40k_crusader/app/app_constants.dart';
+import 'package:wh40k_crusader/app/app_logger.dart';
 import 'package:wh40k_crusader/app/locator.dart';
+import 'package:wh40k_crusader/app/setup_dialog_ui.dart';
 import 'package:wh40k_crusader/data_models/crusade_data_model.dart';
 import 'package:wh40k_crusader/data_models/crusade_unit_data_model.dart';
 import 'package:wh40k_crusader/services/firestore_service.dart';
@@ -14,6 +16,7 @@ class CreateUnitViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
 
   final formKey = GlobalKey<FormBuilderState>();
+  final _dialogService = locator<DialogService>();
 
   final String formNameField = kName;
   final String formBattleFieldRoleField = kBattleFieldRole;
@@ -68,6 +71,20 @@ class CreateUnitViewModel extends BaseViewModel {
   unitPowersRemoveIndex(int index) {
     _unitPowers.removeAt(index);
     notifyListeners();
+  }
+
+  createBasicDialog() async {
+    DialogResponse? response = await _dialogService.showCustomDialog(
+      variant: DialogType.Basic,
+      title: 'Some Tittle',
+      description: 'Some Description',
+      mainButtonTitle: 'Main Button Title',
+      secondaryButtonTitle: 'Secondary Button',
+    );
+
+    if (response != null) {
+      logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
+    }
   }
 
   pop() {

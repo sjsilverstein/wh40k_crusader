@@ -137,7 +137,9 @@ class CreateUnitView extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                   primary: kcPrimaryColor),
                               child: Icon(Icons.add),
-                              onPressed: () {},
+                              onPressed: () async {
+                                await model.createBasicDialog();
+                              },
                             ),
                             subtitle: Column(
                               children: [
