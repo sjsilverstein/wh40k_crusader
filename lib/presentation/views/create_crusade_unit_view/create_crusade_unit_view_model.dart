@@ -75,7 +75,7 @@ class CreateUnitViewModel extends BaseViewModel {
 
   createBasicDialog() async {
     DialogResponse? response = await _dialogService.showCustomDialog(
-      variant: DialogType.Basic,
+      variant: DialogType.AddCrusadeUnitAttribute,
       title: 'Some Tittle',
       description: 'Some Description',
       mainButtonTitle: 'Main Button Title',
