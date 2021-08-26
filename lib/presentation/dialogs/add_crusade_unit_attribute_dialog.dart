@@ -22,6 +22,21 @@ class _AddCrusadeUnitAttributeDialogState
   final formKey = GlobalKey<FormBuilderState>();
   DialogResponse? response;
 
+  runValidation() {
+    if (formKey.currentState!.saveAndValidate()) {
+      return widget.completer(
+        DialogResponse(
+          confirmed: true,
+          data: {
+            kTitle: formKey.currentState!.fields[kTitle]!.value,
+            kDescription: formKey.currentState!.fields[kDescription]!.value
+          },
+        ),
+      );
+    }
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -53,34 +68,27 @@ class _AddCrusadeUnitAttributeDialogState
                   name: kDescription,
                   decoration: InputDecoration(labelText: 'Description:'),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    if (widget.request.secondaryButtonTitle != null)
+                      TextButton(
+                        onPressed: () =>
+                            widget.completer(DialogResponse(confirmed: false)),
+                        child: Text(widget.request.secondaryButtonTitle!),
+                      ),
+                    TextButton(
+                      onPressed: () {
+                        runValidation();
+                      },
+                      child: Text(widget.request.mainButtonTitle ??
+                          'No Main Button Title'),
+                    )
+                  ],
+                )
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (widget.request.secondaryButtonTitle != null)
-                TextButton(
-                  onPressed: () =>
-                      widget.completer(DialogResponse(confirmed: false)),
-                  child: Text(widget.request.secondaryButtonTitle!),
-                ),
-              TextButton(
-                onPressed: () => widget.completer(
-                  DialogResponse(
-                    confirmed: true,
-                    data: {
-                      kTitle: formKey.currentState!.fields[kTitle]!.value,
-                      kDescription:
-                          formKey.currentState!.fields[kDescription]!.value
-                    },
-                  ),
-                ),
-                child: Text(
-                    widget.request.mainButtonTitle ?? 'No Main Button Title'),
-              )
-            ],
-          )
         ],
       ),
     ));
