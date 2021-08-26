@@ -131,6 +131,7 @@ class CreateUnitView extends StatelessWidget {
                             decoration: InputDecoration(labelText: 'Equipment'),
                             initialValue: 'Default Equipment',
                           ),
+                          // TODO Massive refactor out list tiles to widget
                           ListTile(
                             title: Text('Powers'),
                             trailing: ElevatedButton(
@@ -166,16 +167,144 @@ class CreateUnitView extends StatelessWidget {
                             ),
                           ),
                           ListTile(
-                            title: Text('Warlord'),
+                            title: Text('Warlord Traits'),
+                            trailing: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kcPrimaryColor),
+                              child: Icon(Icons.add),
+                              onPressed: () async {
+                                await model.addWarlordTraitAttribute();
+                              },
+                            ),
+                            subtitle: Column(
+                              children: [
+                                ListView.builder(
+                                  itemCount: model.warlordTraits.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      subtitle: Text(
+                                          'Title: ${model.warlordTraits[index].title} Description: ${model.warlordTraits[index].description}'),
+                                      trailing: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: kcWarningColor),
+                                        child: Icon(Icons.remove),
+                                        onPressed: () {
+                                          model.unitWarlordTraitsRemoveIndex(
+                                              index);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           ListTile(
-                            title: Text('Relic'),
+                            title: Text('Relics'),
+                            trailing: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kcPrimaryColor),
+                              child: Icon(Icons.add),
+                              onPressed: () async {
+                                await model.addRelicAttribute();
+                              },
+                            ),
+                            subtitle: Column(
+                              children: [
+                                ListView.builder(
+                                  itemCount: model.relics.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      subtitle: Text(
+                                          'Title: ${model.relics[index].title} Description: ${model.relics[index].description}'),
+                                      trailing: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: kcWarningColor),
+                                        child: Icon(Icons.remove),
+                                        onPressed: () {
+                                          model.unitRelicRemoveByIndex(index);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          ListTile(
+                            title: Text('Battle Honor'),
+                            trailing: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kcPrimaryColor),
+                              child: Icon(Icons.add),
+                              onPressed: () async {
+                                await model.addBattleHonorAttribute();
+                              },
+                            ),
+                            subtitle: Column(
+                              children: [
+                                ListView.builder(
+                                  itemCount: model.battleHonors.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      subtitle: Text(
+                                          'Title: ${model.battleHonors[index].title} Description: ${model.battleHonors[index].description}'),
+                                      trailing: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: kcWarningColor),
+                                        child: Icon(Icons.remove),
+                                        onPressed: () {
+                                          model.unitBattleHonorRemoveByIndex(
+                                              index);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           ListTile(
-                            title: Text('Honor'),
-                          ),
-                          ListTile(
-                            title: Text('Scar'),
+                            title: Text('Battle Scar'),
+                            trailing: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kcPrimaryColor),
+                              child: Icon(Icons.add),
+                              onPressed: () async {
+                                await model.addBattleScarAttribute();
+                              },
+                            ),
+                            subtitle: Column(
+                              children: [
+                                ListView.builder(
+                                  itemCount: model.battleScars.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      subtitle: Text(
+                                          'Title: ${model.battleScars[index].title} Description: ${model.battleScars[index].description}'),
+                                      trailing: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: kcWarningColor),
+                                        child: Icon(Icons.remove),
+                                        onPressed: () {
+                                          model.unitBattleScarRemoveByIndex(
+                                              index);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

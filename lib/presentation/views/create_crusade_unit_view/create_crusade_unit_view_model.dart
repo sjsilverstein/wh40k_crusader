@@ -83,6 +83,21 @@ class CreateUnitViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  unitRelicRemoveByIndex(int index) {
+    _relics.removeAt(index);
+    notifyListeners();
+  }
+
+  unitBattleHonorRemoveByIndex(int index) {
+    _battleHonors.removeAt(index);
+    notifyListeners();
+  }
+
+  unitBattleScarRemoveByIndex(int index) {
+    _battleScars.removeAt(index);
+    notifyListeners();
+  }
+
   unitWarlordTraitsRemoveIndex(int index) {
     _warlordTraits.removeAt(index);
     notifyListeners();
@@ -133,6 +148,60 @@ class CreateUnitViewModel extends BaseViewModel {
       logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
       if (response.confirmed) {
         _warlordTraits.add(WarlordTrait.fromJson(response.data));
+      }
+    }
+    notifyListeners();
+  }
+
+  addRelicAttribute() async {
+    DialogResponse? response = await _dialogService.showCustomDialog(
+      variant: DialogType.AddCrusadeUnitAttribute,
+      title: 'New Relic ',
+      description: 'Some Description',
+      mainButtonTitle: 'Add Relic Trait',
+      secondaryButtonTitle: 'Cancel',
+    );
+
+    if (response != null) {
+      logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
+      if (response.confirmed) {
+        _relics.add(Relic.fromJson(response.data));
+      }
+    }
+    notifyListeners();
+  }
+
+  addBattleHonorAttribute() async {
+    DialogResponse? response = await _dialogService.showCustomDialog(
+      variant: DialogType.AddCrusadeUnitAttribute,
+      title: 'New Battle Honor',
+      description: 'Some Description',
+      mainButtonTitle: 'Add Battle Honor',
+      secondaryButtonTitle: 'Cancel',
+    );
+
+    if (response != null) {
+      logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
+      if (response.confirmed) {
+        _battleHonors.add(BattleHonor.fromJson(response.data));
+      }
+    }
+    notifyListeners();
+  }
+
+  addBattleScarAttribute() async {
+    DialogResponse? response = await _dialogService.showCustomDialog(
+      variant: DialogType.AddCrusadeUnitAttribute,
+      title: 'New Battle Scar',
+      description: 'Some Description',
+      mainButtonTitle: 'Add Battle Scar',
+      secondaryButtonTitle: 'Cancel',
+    );
+
+    if (response != null) {
+      logger.wtf('We have Dialog Response! Value : ${response.confirmed}');
+      if (response.confirmed) {
+        _battleScars.add(BattleScar.fromJson(response.data));
       }
     }
     notifyListeners();

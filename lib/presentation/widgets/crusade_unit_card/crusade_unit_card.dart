@@ -51,6 +51,30 @@ class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
     );
   }
 
+  _buildWarlordTraits() {
+    List<Widget> widgetList = [];
+    unit.warlordTraits.forEach((element) {
+      widgetList.add(
+          Text('Title: ${element.title} Description: ${element.description}'));
+    });
+    return ExpansionTile(
+      title: Text('Warlord Traits'),
+      children: widgetList,
+    );
+  }
+
+  _buildRelics() {
+    List<Widget> widgetList = [];
+    unit.relics.forEach((element) {
+      widgetList.add(
+          Text('Title: ${element.title} Description: ${element.description}'));
+    });
+    return ExpansionTile(
+      title: Text('Relics'),
+      children: widgetList,
+    );
+  }
+
   _buildBattleScars() {
     List<Widget> widgetList = [];
     unit.battleScars.forEach((element) {
@@ -118,6 +142,8 @@ class CrusadeUnitCard extends ViewModelWidget<CrusadeViewModel> {
             ],
           ),
           unit.psychicPowers.length > 0 ? _buildPowers() : Container(),
+          unit.warlordTraits.length > 0 ? _buildWarlordTraits() : Container(),
+          unit.relics.length > 0 ? _buildRelics() : Container(),
           unit.battleHonors.length > 0 ? _buildBattleHonors() : Container(),
           unit.battleScars.length > 0 ? _buildBattleScars() : Container(),
           Row(

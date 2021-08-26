@@ -12,6 +12,12 @@ class BattleHonor {
           title: data[kTitle] as String,
           description: data[kDescription] ?? 'No Description Provided',
         );
+  Map<String, dynamic> toJson() {
+    return {
+      kTitle: this.title,
+      kDescription: this.description ?? null,
+    };
+  }
 }
 
 class BattleScar {
@@ -25,6 +31,12 @@ class BattleScar {
           title: data[kTitle]! as String,
           description: data[kDescription] ?? 'No Description Provided',
         );
+  Map<String, dynamic> toJson() {
+    return {
+      kTitle: this.title,
+      kDescription: this.description ?? null,
+    };
+  }
 }
 
 class Power {
@@ -58,6 +70,13 @@ class WarlordTrait {
           title: data[kTitle]! as String,
           description: data[kDescription] ?? 'No Description Provided',
         );
+
+  Map<String, dynamic> toJson() {
+    return {
+      kTitle: this.title,
+      kDescription: this.description ?? null,
+    };
+  }
 }
 
 class Relic {
@@ -71,6 +90,13 @@ class Relic {
           title: data[kTitle]! as String,
           description: data[kDescription] ?? 'No Description Provided',
         );
+
+  Map<String, dynamic> toJson() {
+    return {
+      kTitle: this.title,
+      kDescription: this.description ?? null,
+    };
+  }
 }
 
 class CrusadeUnitDataModel {
@@ -193,12 +219,12 @@ class CrusadeUnitDataModel {
       kExperience: experience,
       kEquipment: equipment,
       kPowers: psychicPowers.map((e) => e.toJson()).toList(),
-      kWarlordTraits: warlordTraits,
-      kRelics: relics,
+      kWarlordTraits: warlordTraits.map((e) => e.toJson()).toList(),
+      kRelics: relics.map((e) => e.toJson()).toList(),
+      kBattleHonors: battleHonors.map((e) => e.toJson()).toList(),
+      kBattleScars: battleScars.map((e) => e.toJson()).toList(),
       kBattlesPlayed: battlesPlayed,
       kBattlesSurvived: battlesSurvived,
-      kBattleHonors: battleHonors,
-      kBattleScars: battleScars,
       kCreatedAt: createdAt ?? FieldValue.serverTimestamp(),
       kUpdatedAt: FieldValue.serverTimestamp(),
     };
